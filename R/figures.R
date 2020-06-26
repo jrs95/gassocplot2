@@ -2,10 +2,9 @@
 ## Regional association plots                                         ##
 ##                                                                    ##
 ## James Staley                                                       ##
-## University of Bristol                                              ## 
-## Email: james.staley@bristol.ac.uk                                  ##
+## Email: jrstaley95@gmail.com                                        ##
 ##                                                                    ##
-## 19/02/19                                                           ##
+## 26/06/20                                                           ##
 ########################################################################
 
 ##########################################################
@@ -18,11 +17,13 @@
 #' @param chr chromosome
 #' @param x.min start of region
 #' @param x.max end of region
+#' @param build genome build
 #' @import ggplot2
 #' @author James R Staley <james.staley@bristol.ac.uk>
 #' @export
-plot_recombination_rate <- function(chr, x.min, x.max) {
-  recombination.data <- genetic_map[(genetic_map$chr==chr & genetic_map$pos>=x.min & genetic_map$pos<=x.max), ]
+plot_recombination_rate <- function(chr, x.min, x.max, build=37) {
+  if(build==37){recombination.data <- gassocplot2::genetic_map_b37[(genetic_map$chr==chr & genetic_map$pos>=x.min & genetic_map$pos<=x.max),]}
+  if(build==38){recombination.data <- gassocplot2::genetic_map_b38[(genetic_map$chr==chr & genetic_map$pos>=x.min & genetic_map$pos<=x.max),]}
   recomb.df <- data.frame(coordinates=recombination.data$pos, y=recombination.data$combined_rate, panel="Recombination Rate", stringsAsFactors=F)
   cols <- c("Recomb. rate"="black","Gene"="#FF3D14","Exon"="#66A300")
   recomb.plot <- ggplot(data = recomb.df, aes(x=coordinates, y=y, colour="black")) + 
@@ -36,11 +37,13 @@ plot_recombination_rate <- function(chr, x.min, x.max) {
 #' @param chr chromosome
 #' @param x.min start of region
 #' @param x.max end of region
+#' @param build genome build
 #' @import ggplot2
 #' @author James R Staley <james.staley@bristol.ac.uk>
 #' @export
-plot_recombination_rate_stack <- function(chr, x.min, x.max) {
-  recombination.data <- genetic_map[(genetic_map$chr==chr & genetic_map$pos>=x.min & genetic_map$pos<=x.max), ]
+plot_recombination_rate_stack <- function(chr, x.min, x.max, build=37) {
+  if(build==37){recombination.data <- genetic_map_b37[(genetic_map$chr==chr & genetic_map$pos>=x.min & genetic_map$pos<=x.max),]}
+  if(build==38){recombination.data <- genetic_map_b38[(genetic_map$chr==chr & genetic_map$pos>=x.min & genetic_map$pos<=x.max),]}
   recomb.df <- data.frame(coordinates=recombination.data$pos, y=recombination.data$combined_rate, panel="Recombination Rate", stringsAsFactors=F)
   cols <- c("Recomb. rate"="black","Gene"="#FF3D14","Exon"="#66A300")
   recomb.plot <- ggplot(data = recomb.df, aes(x=coordinates, y=y, colour="black")) + 
@@ -360,10 +363,11 @@ plot_assoc_combined <- function(recombination.plot, gene.plot, marker.plot, titl
 #' @param x.max end of region
 #' @param top.marker the top associated marker, i.e. the marker with the largest -log10p or probability
 #' @param legend add r2 legend
+#' @param build genome build
 #' @import ggplot2 grid gridExtra gtable
 #' @author James R Staley <james.staley@bristol.ac.uk>
 #' @export
-assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, subtitle=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE){
+assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, subtitle=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37){
   
   # Error messages
   if(!(type=="log10p" | type=="prob")) stop("the type of plot has to be either log10p or prob")
@@ -391,13 +395,15 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   }else{data$stats <- data$prob}
   data <- data[,c("marker", "chr", "pos", "stats")]
   data$marker <- as.character(data$marker)
-  chr <- as.integer(data$chr[1])
+  if(build==37){chr <- as.integer(data$chr[1])}
+  if(build==38){chr <- as.character(data$chr[1])}
   if(is.null(x.min)){x.min <- min(as.integer(data$pos))}
   if(is.null(x.max)){x.max <- max(as.integer(data$pos))}
   if((x.max - x.min)>10000000) stop("the plotting tool can plot a maximum of 10MB")
 
   # Genes
-  gene.region <- gassocplot::genes[gassocplot::genes$chr==chr & !(gassocplot::genes$end<x.min) & !(gassocplot::genes$start>x.max),]
+  if(build==37){gene.region <- gassocplot2::genes[gassocplot2::genes$chr==chr & !(gassocplot2::genes$end<x.min) & !(gassocplot2::genes$start>x.max),]}
+  if(build==38){gene.region <- gassocplot2::genes_b38[gassocplot2::genes_b38$chr==chr & !(gassocplot2::genes_b38$end<x.min) & !(gassocplot2::genes_b38$start>x.max),1:5]}
   gene.region$start[gene.region$start<x.min] <- x.min
   gene.region$end[gene.region$end>x.max] <- x.max
   gene.region <- gene.region[with(gene.region, order(start)), ]
@@ -639,10 +645,11 @@ add_g_legend <- function(g, legend){
 #' @param x.max end of region
 #' @param top.marker the top associated marker, i.e. the marker with the largest -log10p or probability
 #' @param legend add r2 legend
+#' @param build genome build
 #' @import ggplot2 grid gridExtra gtable
 #' @author James R Staley <james.staley@bristol.ac.uk>
 #' @export
-stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE){
+stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37){
   
   # Error messages
   if(!(type=="log10p" | type=="prob")) stop("the type of plot has to be either log10p or prob")
@@ -661,10 +668,12 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   if(is.null(corr) & !is.null(corr.top)){if(length(corr.top)!=nrow(markers)) stop("corr.top has to have the same length as the number of rows in the markers dataset")}
   if(!is.null(top.marker) & length(which(top.marker==markers$marker))==0) stop("top.marker is not contained in the markers dataset")
   if(!is.null(top.marker) & length(which(top.marker==markers$marker))>1) stop("top.marker maps to multiple markers in the markers dataset")
+  if(!(build %in% c(37,38))) stop("genome build can only be 37 or 38")
   
   # Coerce data
   markers$marker <- as.character(markers$marker)
-  chr <- as.integer(markers$chr[1])
+  if(build==37){chr <- as.integer(markers$chr[1])}
+  if(build==38){chr <- as.character(markers$chr[1])}
   r2_legend <- legend
   if(is.null(x.min)){x.min <- min(as.integer(markers$pos))}
   if(is.null(x.max)){x.max <- max(as.integer(markers$pos))}
@@ -678,7 +687,8 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   if(type=="log10p"){ylab <- expression("-log"["10"]*paste("(",italic("p"),")"))}else{if(is.null(ylab)){ylab <- "Probability"}}
  
   # Genes
-  gene.region <- gassocplot::genes[gassocplot::genes$chr==chr & !(gassocplot::genes$end<x.min) & !(gassocplot::genes$start>x.max),]
+  if(build==37){gene.region <- gassocplot2::genes[gassocplot2::genes$chr==chr & !(gassocplot2::genes$end<x.min) & !(gassocplot2::genes$start>x.max),]}
+  if(build==38){gene.region <- gassocplot2::genes_b38[gassocplot2::genes_b38$chr==chr & !(gassocplot2::genes_b38$end<x.min) & !(gassocplot2::genes_b38$start>x.max),1:5]}
   gene.region$start[gene.region$start<x.min] <- x.min
   gene.region$end[gene.region$end>x.max] <- x.max
   gene.region <- gene.region[with(gene.region, order(start)), ]
@@ -692,7 +702,7 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   if(is.null(corr) & is.null(corr.top)){r2_legend <- FALSE; corr <- matrix(NA, nrow=nrow(markers), ncol=nrow(markers))}
 
   # Recombination plot
-  recombination.plot <- plot_recombination_rate_stack(chr, x.min, x.max)
+  recombination.plot <- plot_recombination_rate_stack(chr, x.min, x.max, build)
 
   # Gene plot
   if(ngenes==0){gene.plot <- plot_gene_zero(chr, x.min, x.max, stack=TRUE)}
