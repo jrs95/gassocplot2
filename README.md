@@ -10,14 +10,14 @@ Regional association plots for genetic and epigenetic data.
 ## Installation
 1. install.packages("devtools")
 2. library(devtools) 
-3. install_github("jrs95/gassocplot")
-4. library(gassocplot)
+3. install_github("jrs95/gassocplot2")
+4. library(gassocplot2)
 
 ## Examples
 \#\#\# assoc_plot  
-markers <- gassocplot::test_assoc_plot  
+markers <- gassocplot2::test_assoc_plot  
 head(markers)  
-corr <- gassocplot::test_corr # this is correlation not correlation squared  
+corr <- gassocplot2::test_corr # this is correlation not correlation squared  
 plot <- assoc_plot(markers, corr)   
 assoc_plot_save(plot, "assoc_plot_test.png")  
 
