@@ -19,7 +19,7 @@
 #' @param x.max end of region
 #' @param build genome build
 #' @import ggplot2
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_recombination_rate <- function(chr, x.min, x.max, build=37) {
   if(build==37){recombination.data <- gassocplot2::genetic_map_b37[(gassocplot2::genetic_map_b37$chr==chr & gassocplot2::genetic_map_b37$pos>=x.min & gassocplot2::genetic_map_b37$pos<=x.max),]}
@@ -39,7 +39,7 @@ plot_recombination_rate <- function(chr, x.min, x.max, build=37) {
 #' @param x.max end of region
 #' @param build genome build
 #' @import ggplot2
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_recombination_rate_stack <- function(chr, x.min, x.max, build=37) {
   if(build==37){recombination.data <- gassocplot2::genetic_map_b37[(gassocplot2::genetic_map_b37$chr==chr & gassocplot2::genetic_map_b37$pos>=x.min & gassocplot2::genetic_map_b37$pos<=x.max),]}
@@ -62,7 +62,7 @@ plot_recombination_rate_stack <- function(chr, x.min, x.max, build=37) {
 #' @param x.min start of region
 #' @param x.max end of region
 #' @import ggplot2
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_gene_zero <- function(chr, x.min, x.max, stack=FALSE){
   genes.df.pos <- data.frame(pos=c(x.min,x.max), y=c(10,5), stringsAsFactors=F, stack=FALSE) 
@@ -83,7 +83,7 @@ plot_gene_zero <- function(chr, x.min, x.max, stack=FALSE){
 #' @param x.min start of region
 #' @param x.max end of region
 #' @import ggplot2
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_gene_two <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
   small.gene <- (as.numeric(gene.region$end) - as.numeric(gene.region$start)) < (x.max-x.min)/190
@@ -113,7 +113,7 @@ plot_gene_two <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
 #' @param x.min start of region
 #' @param x.max end of region
 #' @import ggplot2
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_gene_five <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
   small.gene <- (as.numeric(gene.region$end) - as.numeric(gene.region$start)) < (x.max-x.min)/190
@@ -143,7 +143,7 @@ plot_gene_five <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
 #' @param x.min start of region
 #' @param x.max end of region
 #' @import ggplot2
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_gene_ten <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
   small.gene <- (as.numeric(gene.region$end) - as.numeric(gene.region$start)) < (x.max-x.min)/190
@@ -173,7 +173,7 @@ plot_gene_ten <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
 #' @param x.min start of region
 #' @param x.max end of region
 #' @import ggplot2
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_gene_fifteen <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
   small.gene <- (as.numeric(gene.region$end) - as.numeric(gene.region$start)) < (x.max-x.min)/190
@@ -210,10 +210,11 @@ plot_gene_fifteen <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
 #' @param top.marker the top associated marker, i.e. the marker with the largest -log10p or probability
 #' @param ylab the y-axis label
 #' @param type the type of the plot either log10p or probabilities
+#' @param highlights additional points to highlight
 #' @import ggplot2
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p"){
+plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p", highlights=NULL){
   if(is.null(corr) & is.null(corr.top)) stop("no correlation statistics were input")
   if(is.null(corr) & !is.null(corr.top) & is.null(top.marker)) stop("top.marker must be defined if corr.top is provided")
   miss <- is.na(data$stats)
@@ -239,6 +240,17 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
     geomtext <- T
   }
   if(!is.null(corr)){r2 <- corr[,top_marker]^2}else{r2 <- corr.top^2}
+  if(!is.null(highlights)){
+    highlight_points <- data[(data$marker %in% highlights),]
+    if(nrow(highlight_points)){
+      highlight_points$label_pos <- highlight_points$pos
+      highlight_points$label_pos[(x.max-highlight_points$pos)<10000] <- highlight_points$pos[(x.max-highlight_points$pos)<10000] - 0.025*(x.max-x.min)
+      highlight_points$label_pos[(highlight_points$pos-x.min)<10000] <- highlight_points$pos[(highlight_points$pos-x.min)<10000] + 0.025*(x.max-x.min)
+      hightext <- T
+    }else{
+      hightext <- F  
+    }
+  }
   data$r2 <- "miss"
   data$r2[r2>=0 & r2<0.2 & !is.na(r2)] <- "0.0-0.2"
   data$r2[r2>=0.2 & r2<0.4 & !is.na(r2)] <- "0.2-0.4"
@@ -249,6 +261,7 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
   ylim <- max((max(data$stats)+0.1*max(data$stats)),1)
   marker.plot <- ggplot(aes(x=pos, y=stats), data=data) + geom_point(aes(fill=r2), pch=21, size=3.5) + scale_fill_manual(values=c("#DCDCDC", "#66FFFF", "#66FF66", "#FFCC00", "#FF9933", "#CC3300"), drop=FALSE) + geom_point(data=lead_marker, aes(pos,stats), pch=23, colour="black", fill="purple", size=4)  + theme_bw() + ylab(ylab) + xlab(NULL) + scale_y_continuous(limits=c(0,ylim)) + theme(axis.title.y=element_text(vjust=2.25, size=16), axis.text=element_text(size=14)) + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + scale_x_continuous(limits=c(x.min,x.max), breaks=NULL) + theme(axis.title=element_text(size=10)) + theme(legend.text=element_text(size=11), legend.title=element_text(size=12), legend.background = element_rect(colour = "black")) + theme(panel.background=element_rect(fill=NA)) + theme(legend.position="bottom") + guides(fill = guide_legend(nrow = 1))
   if(geomtext){marker.plot <- marker.plot + geom_text(data=lead_marker, aes(x=label_pos,y=stats,label=marker), vjust=-1, hjust=0.5, size=4.5)}else{if(lead_marker$stats[1]/ylim>=0.3){marker.plot <- marker.plot + geom_label(data=lead_marker, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.05*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_label(data=lead_marker, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}
+  if(!is.null(highlights)){if(hightext){if(all(highlight_points$stats[1]/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.05*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}}
   if(type=="prob"){suppressMessages(marker.plot <- marker.plot + scale_y_continuous(limits=c(0,ylim), breaks=c(0, 0.25, 0.5, 0.75, 1)))}
   return(marker.plot)
 }
@@ -262,7 +275,7 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
 #' g_legend 
 #' @param gplot a ggplot
 #' @import ggplot2 grid gridExtra gtable
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 g_legend<-function(gplot){
   tmp <- ggplot_gtable(ggplot_build(gplot))
@@ -286,7 +299,7 @@ g_legend<-function(gplot){
 #' @param ngenes number of genes in the genomic region
 #' @param r2_legend add r2 legend
 #' @import ggplot2 grid gridExtra gtable
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_assoc_combined <- function(recombination.plot, gene.plot, marker.plot, title=NULL, subtitle=NULL, ngenes, r2_legend=TRUE){
   legend <- g_legend(marker.plot); marker.plot <- marker.plot + theme(legend.position="none")
@@ -364,10 +377,11 @@ plot_assoc_combined <- function(recombination.plot, gene.plot, marker.plot, titl
 #' @param top.marker the top associated marker, i.e. the marker with the largest -log10p or probability
 #' @param legend add r2 legend
 #' @param build genome build
+#' @param highlights additional points to highlight
 #' @import ggplot2 grid gridExtra gtable
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, subtitle=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37){
+assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, subtitle=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, highlights=NULL){
   
   # Error messages
   if(!(type=="log10p" | type=="prob")) stop("the type of plot has to be either log10p or prob")
@@ -431,7 +445,7 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   data$chr <- as.integer(data$chr)
   data$pos <- as.integer(data$pos)
   if(type=="log10p"){ylab <- expression("-log"["10"]*paste("(",italic("p"),")"))}else{if(is.null(ylab)){ylab <- "Probability"}}  
-  marker.plot <- plot_assoc(data, corr, corr.top, x.min, x.max, top.marker, ylab, type)
+  marker.plot <- plot_assoc(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, highlights)
   
   # Combined plot
   combined.plot <- plot_assoc_combined(recombination.plot, gene.plot, marker.plot, title, subtitle, ngenes, legend)
@@ -452,7 +466,7 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
 #' @param height the height of the plot
 #' @param dpi the resolution of the plot
 #' @import ggplot2 grid gridExtra gtable
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 assoc_plot_save <- function(x, file, width=9, height=7, dpi=500){
   suppressGraphics(ggsave(file, plot=grid.draw(x), width=width, height=height, units="in", limitsize=F, dpi=dpi))
@@ -473,10 +487,11 @@ assoc_plot_save <- function(x, file, width=9, height=7, dpi=500){
 #' @param top.marker the top associated marker, i.e. the marker with the largest -log10p or probability
 #' @param ylab the y-axis label
 #' @param type the type of the plot either log10p or probabilities
+#' @param highlights additional points to highlight
 #' @import ggplot2
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p"){
+plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p", highlights=NULL){
   if(is.null(corr) & is.null(corr.top)) stop("no correlation statistics were input")
   miss <- is.na(data$stats)
   if(!is.null(corr)){corr <- corr[!miss, !miss]}
@@ -501,6 +516,17 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
     geomtext <- T
   }
   if(!is.null(corr)){r2 <- corr[,top_marker]^2}else{r2 <- corr.top^2}
+  if(!is.null(highlights)){
+    highlight_points <- data[(data$marker %in% highlights),]
+    if(nrow(highlight_points)){
+      highlight_points$label_pos <- highlight_points$pos
+      highlight_points$label_pos[(x.max-highlight_points$pos)<10000] <- highlight_points$pos[(x.max-highlight_points$pos)<10000] - 0.025*(x.max-x.min)
+      highlight_points$label_pos[(highlight_points$pos-x.min)<10000] <- highlight_points$pos[(highlight_points$pos-x.min)<10000] + 0.025*(x.max-x.min)
+      hightext <- T
+    }else{
+      hightext <- F  
+    }
+  }
   data$r2 <- "miss"
   data$r2[r2>=0 & r2<0.2 & !is.na(r2)] <- "0.0-0.2"
   data$r2[r2>=0.2 & r2<0.4 & !is.na(r2)] <- "0.2-0.4"
@@ -511,6 +537,7 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
   ylim <- max((max(data$stats)+0.2*max(data$stats)),1)
   marker.plot <- ggplot(aes(x=pos,y=stats), data=data) + geom_point(aes(fill=r2), pch=21, size=3) + scale_fill_manual(values=c("#DCDCDC", "#66FFFF", "#66FF66", "#FFCC00", "#FF9933", "#CC3300"), drop=FALSE) + geom_point(data=lead_marker, aes(x=pos,y=stats), pch=23, colour="black", fill="purple", size=4) + theme_bw() +  ylab(ylab) + xlab(NULL) + scale_y_continuous(limits=c(0,ylim)) + theme(axis.title.y=element_text(vjust=2.25, size=14), axis.text=element_text(size=12)) + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + scale_x_continuous(limits=c(x.min, x.max), breaks=NULL) + theme(axis.title=element_text(size=10)) + theme(legend.text=element_text(size=10), legend.title=element_text(size=12), legend.background = element_rect(colour = "black")) + theme(panel.background=element_rect(fill=NA)) + theme(legend.position="bottom") + guides(fill = guide_legend(nrow = 1))
   if(geomtext){marker.plot <- marker.plot + geom_text(data=lead_marker, aes(x=label_pos,y=stats,label=marker), vjust=-1, hjust=0.5, size=4.5)}else{if(lead_marker$stats[1]/ylim>=0.3){marker.plot <- marker.plot + geom_label(data=lead_marker, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.1*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_label(data=lead_marker, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.1*ylim), size=4.5, alpha=1)}}
+  if(!is.null(highlights)){if(hightext){if(all(highlight_points$stats[1]/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.1*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.1*ylim), size=4.5, alpha=1)}}}
   if(type=="prob"){suppressMessages(marker.plot <- marker.plot + scale_y_continuous(limits=c(0,ylim), breaks=c(0, 0.25, 0.5, 0.75, 1)))}
   return(marker.plot)
 }
@@ -526,7 +553,7 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
 #' @param marker.plot association scatter plot
 #' @param title title of the plot
 #' @import ggplot2 grid gridExtra gtable
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_regional_assoc <- function(recombination.plot, marker.plot, title){
   marker.plot <- marker.plot + theme(legend.position="none")
@@ -566,7 +593,7 @@ plot_regional_assoc <- function(recombination.plot, marker.plot, title){
 #' @param title title of the plot
 #' @param ngenes number of genes in the genomic region
 #' @import ggplot2 grid gridExtra gtable
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_regional_gene_assoc <- function(recombination.plot, marker.plot, gene.plot, title, ngenes){
   marker.plot <- marker.plot + theme(legend.position="none")
@@ -620,7 +647,7 @@ plot_regional_gene_assoc <- function(recombination.plot, marker.plot, gene.plot,
 #' @param g a ggplot
 #' @param legend legend
 #' @import ggplot2 grid gridExtra gtable
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 add_g_legend <- function(g, legend){
   lheight <- sum(legend$height)*1.5
@@ -647,10 +674,11 @@ add_g_legend <- function(g, legend){
 #' @param top.marker the top associated marker, i.e. the marker with the largest -log10p or probability
 #' @param legend add r2 legend
 #' @param build genome build
+#' @param highlights additional points to highlight
 #' @import ggplot2 grid gridExtra gtable
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37){
+stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, highlights=NULL){
   
   # Error messages
   if(!(type=="log10p" | type=="prob")) stop("the type of plot has to be either log10p or prob")
@@ -722,7 +750,7 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
     }else{
       data <- data.frame(marker=markers$marker, chr=as.integer(markers$chr), pos=as.integer(markers$pos), stats=z[,i], stringsAsFactors=F)    
     }
-    marker.plot <- plot_assoc_stack(data, corr, corr.top, x.min, x.max, top.marker, ylab, type)
+    marker.plot <- plot_assoc_stack(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, highlights)
     legend <- g_legend(marker.plot)
     if(i==length(traits)){g <- plot_regional_gene_assoc(recombination.plot, marker.plot, gene.plot, traits[i], ngenes)}
     if(i<length(traits)){
@@ -757,7 +785,7 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
 #' @param height the height of the plot
 #' @param dpi the resolution of the plot
 #' @import ggplot2 grid gridExtra gtable
-#' @author James R Staley <james.staley@bristol.ac.uk>
+#' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 stack_assoc_plot_save <- function(x, file, n_traits, width=NULL, height=NULL, dpi=500){
   if(is.null(width)){width <- 8}
