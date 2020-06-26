@@ -22,11 +22,11 @@ plot <- assoc_plot(markers, corr)
 assoc_plot_save(plot, "assoc_plot_test.png")  
 
 \#\#\# stack_assoc_plot  
-markers <- gassocplot::test_stack_assoc_plot_markers  
+markers <- gassocplot2::test_stack_assoc_plot_markers  
 head(markers)  
-z <- gassocplot::test_stack_assoc_plot_associations  
+z <- gassocplot2::test_stack_assoc_plot_associations  
 head(z)  
-corr <- gassocplot::test_corr # this is correlation not correlation squared  
+corr <- gassocplot2::test_corr # this is correlation not correlation squared  
 plot <- stack_assoc_plot(markers, z, corr, traits=c("Trait 1", "Trait 2"))  
 stack_assoc_plot_save(plot, "stack_assoc_plot_test.png", 2)
 
