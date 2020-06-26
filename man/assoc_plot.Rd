@@ -6,7 +6,7 @@
 \usage{
 assoc_plot(data, corr=NULL, corr.top=NULL, ylab = NULL, title = NULL,
   subtitle = NULL, type = "log10p", x.min = NULL, x.max = NULL,
-  top.marker=NULL, legend=TRUE)
+  top.marker=NULL, legend=TRUE, build=37, highlights=NULL)
 }
 \arguments{
 \item{data}{data.frame with markername (marker), chromosome (chr), build 37 position (pos) and either z-statistics (z) or probabilities (prob) columns}
@@ -30,6 +30,10 @@ assoc_plot(data, corr=NULL, corr.top=NULL, ylab = NULL, title = NULL,
 \item{top.marker}{the top associated marker, i.e. the marker with the largest -log10p or probability}
   
 \item{legend}{add r2 legend}
+
+\item{build}{genome build}
+
+\item{highlights}{additional points to highlight}
 }
 \description{
 assoc_plot plots a scatter graph of associations (e.g. log10 p-values)
