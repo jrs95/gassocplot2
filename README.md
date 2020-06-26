@@ -1,4 +1,4 @@
-# gassocplot
+# gassocplot2
 Regional association plots for genetic and epigenetic data.
 
 ## Functions
