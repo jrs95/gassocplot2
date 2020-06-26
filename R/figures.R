@@ -403,8 +403,8 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   if((x.max - x.min)>10000000) stop("the plotting tool can plot a maximum of 10MB")
 
   # Genes
-  if(build==37){gene.region <- gassocplot2::genes[gassocplot2::genes$chr==chr & !(gassocplot2::genes$end<x.min) & !(gassocplot2::genes$start>x.max),]}
-  if(build==38){gene.region <- gassocplot2::genes_b38[gassocplot2::genes_b38$chr==chr & !(gassocplot2::genes_b38$end<x.min) & !(gassocplot2::genes_b38$start>x.max),1:5]}
+  if(build==37){gene.region <- gassocplot2::genes[(gassocplot2::genes$chr==chr & !(gassocplot2::genes$end<x.min) & !(gassocplot2::genes$start>x.max)),]}
+  if(build==38){gene.region <- gassocplot2::genes_b38[(gassocplot2::genes_b38$chr==chr & !(gassocplot2::genes_b38$end<x.min) & !(gassocplot2::genes_b38$start>x.max) & gassocplot2::genes_b38$gene_type=="protein_coding"),1:5]}
   gene.region$start[gene.region$start<x.min] <- x.min
   gene.region$end[gene.region$end>x.max] <- x.max
   gene.region <- gene.region[with(gene.region, order(start)), ]
@@ -688,8 +688,8 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   if(type=="log10p"){ylab <- expression("-log"["10"]*paste("(",italic("p"),")"))}else{if(is.null(ylab)){ylab <- "Probability"}}
  
   # Genes
-  if(build==37){gene.region <- gassocplot2::genes[gassocplot2::genes$chr==chr & !(gassocplot2::genes$end<x.min) & !(gassocplot2::genes$start>x.max),]}
-  if(build==38){gene.region <- gassocplot2::genes_b38[gassocplot2::genes_b38$chr==chr & !(gassocplot2::genes_b38$end<x.min) & !(gassocplot2::genes_b38$start>x.max),1:5]}
+  if(build==37){gene.region <- gassocplot2::genes[(gassocplot2::genes$chr==chr & !(gassocplot2::genes$end<x.min) & !(gassocplot2::genes$start>x.max)),]}
+  if(build==38){gene.region <- gassocplot2::genes_b38[(gassocplot2::genes_b38$chr==chr & !(gassocplot2::genes_b38$end<x.min) & !(gassocplot2::genes_b38$start>x.max) & gassocplot2::genes_b38$gene_type=="protein_coding"),1:5]}
   gene.region$start[gene.region$start<x.min] <- x.min
   gene.region$end[gene.region$end>x.max] <- x.max
   gene.region <- gene.region[with(gene.region, order(start)), ]
