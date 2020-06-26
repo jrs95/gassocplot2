@@ -5,7 +5,8 @@
 \title{stack_assoc_plot}
 \usage{
 stack_assoc_plot(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL,
-  type="log10p", x.min = NULL, x.max = NULL, top.marker = NULL, legend=TRUE)
+  type="log10p", x.min = NULL, x.max = NULL, top.marker = NULL, legend=TRUE,
+  build=37, highlights=NULL)
 }
 \arguments{
 \item{markers}{data.frame of markers with markername (marker), chromosome (chr) and position (pos)}
@@ -29,6 +30,10 @@ stack_assoc_plot(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL,
 \item{top.marker}{the marker to be annotated in the plot}
   
 \item{legend}{add r2 legend}
+
+\item{build}{genome build}
+
+\item{highlights}{additional points to highlight}
 }
 \description{
 stack_assoc_plot plots stacked regional association plots
