@@ -386,7 +386,8 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   if(is.null(corr) & !is.null(corr.top)){if(length(corr.top)!=nrow(data)) stop("corr.top has to have the same length as the number of rows in the markers dataset")}
   if(!is.null(top.marker) & length(which(top.marker==data$marker))==0) stop("top.marker is not contained in the markers dataset")
   if(!is.null(top.marker) & length(which(top.marker==data$marker))>1) stop("top.marker maps to multiple markers in the markers dataset")
-
+  if(!(build %in% c(37, 38))) stop("genome build can only be 37 or 38")
+  
   # Dataset
   if(type=="log10p"){
     mlog10p <- -(log(2) + pnorm(-abs(data$z), log.p=T))/log(10)
@@ -417,7 +418,7 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   if(is.null(corr) & is.null(corr.top)){r2_legend <- FALSE; corr <- matrix(NA, nrow=nrow(markers), ncol=nrow(markers))}
   
   # Recombination plot
-  recombination.plot <- plot_recombination_rate(chr, x.min, x.max)
+  recombination.plot <- plot_recombination_rate(chr, x.min, x.max, build)
 
   # Gene plot
   if(ngenes==0){gene.plot <- plot_gene_zero(chr, x.min, x.max)}
@@ -668,7 +669,7 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   if(is.null(corr) & !is.null(corr.top)){if(length(corr.top)!=nrow(markers)) stop("corr.top has to have the same length as the number of rows in the markers dataset")}
   if(!is.null(top.marker) & length(which(top.marker==markers$marker))==0) stop("top.marker is not contained in the markers dataset")
   if(!is.null(top.marker) & length(which(top.marker==markers$marker))>1) stop("top.marker maps to multiple markers in the markers dataset")
-  if(!(build %in% c(37,38))) stop("genome build can only be 37 or 38")
+  if(!(build %in% c(37, 38))) stop("genome build can only be 37 or 38")
   
   # Coerce data
   markers$marker <- as.character(markers$marker)
