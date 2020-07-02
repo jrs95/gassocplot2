@@ -239,7 +239,6 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
     if((lead_marker$pos-x.min)<10000){lead_marker$label_pos <- lead_marker$pos + 0.025*(x.max-x.min)}
     geomtext <- T
   }
-  if(!is.null(corr)){r2 <- corr[,top_marker]^2}else{r2 <- corr.top^2}
   if(!is.null(highlights)){
     highlight_points <- data[(data$marker %in% highlights),]
     if(nrow(highlight_points)){
@@ -251,6 +250,7 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
       hightext <- F  
     }
   }
+  if(!is.null(corr)){r2 <- corr[,top_marker]^2}else{r2 <- corr.top^2}
   data$r2 <- "miss"
   data$r2[r2>=0 & r2<0.2 & !is.na(r2)] <- "0.0-0.2"
   data$r2[r2>=0.2 & r2<0.4 & !is.na(r2)] <- "0.2-0.4"
@@ -515,7 +515,6 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
     if((lead_marker$pos-x.min)<10000){lead_marker$label_pos <- lead_marker$pos + 0.025*(x.max-x.min)}
     geomtext <- T
   }
-  if(!is.null(corr)){r2 <- corr[,top_marker]^2}else{r2 <- corr.top^2}
   if(!is.null(highlights)){
     highlight_points <- data[(data$marker %in% highlights),]
     if(nrow(highlight_points)){
@@ -527,6 +526,7 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
       hightext <- F  
     }
   }
+  if(!is.null(corr)){r2 <- corr[,top_marker]^2}else{r2 <- corr.top^2}
   data$r2 <- "miss"
   data$r2[r2>=0 & r2<0.2 & !is.na(r2)] <- "0.0-0.2"
   data$r2[r2>=0.2 & r2<0.4 & !is.na(r2)] <- "0.2-0.4"
