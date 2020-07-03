@@ -10,5 +10,5 @@ License: GPL (>= 2)
 ByteCompile: TRUE
 LazyData: TRUE
 Encoding: UTF-8
-Imports: ggplot2, grid, gridExtra, gtable, R.devices
+Imports: ggplot2, ggrepel, grid, gridExtra, gtable, R.devices
 RoxygenNote: 6.0.1
