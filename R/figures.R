@@ -241,10 +241,10 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
   }
   if(!is.null(highlights)){
     highlight_points <- data[(data$marker %in% highlights),]
-    if(nrow(highlight_points)){
-      highlight_points$label_pos <- highlight_points$pos
-      highlight_points$label_pos[(x.max-highlight_points$pos)<10000] <- highlight_points$pos[(x.max-highlight_points$pos)<10000] - 0.025*(x.max-x.min)
-      highlight_points$label_pos[(highlight_points$pos-x.min)<10000] <- highlight_points$pos[(highlight_points$pos-x.min)<10000] + 0.025*(x.max-x.min)
+    if(nrow(highlight_points)>0){
+      # highlight_points$label_pos <- highlight_points$pos
+      # highlight_points$label_pos[(x.max-highlight_points$pos)<10000] <- highlight_points$pos[(x.max-highlight_points$pos)<10000] - 0.025*(x.max-x.min)
+      # highlight_points$label_pos[(highlight_points$pos-x.min)<10000] <- highlight_points$pos[(highlight_points$pos-x.min)<10000] + 0.025*(x.max-x.min)
       hightext <- T
     }else{
       hightext <- F  
@@ -261,7 +261,8 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
   ylim <- max((max(data$stats)+0.1*max(data$stats)),1)
   marker.plot <- ggplot(aes(x=pos, y=stats), data=data) + geom_point(aes(fill=r2), pch=21, size=3.5) + scale_fill_manual(values=c("#DCDCDC", "#66FFFF", "#66FF66", "#FFCC00", "#FF9933", "#CC3300"), drop=FALSE) + geom_point(data=lead_marker, aes(pos,stats), pch=23, colour="black", fill="purple", size=4)  + theme_bw() + ylab(ylab) + xlab(NULL) + scale_y_continuous(limits=c(0,ylim)) + theme(axis.title.y=element_text(vjust=2.25, size=16), axis.text=element_text(size=14)) + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + scale_x_continuous(limits=c(x.min,x.max), breaks=NULL) + theme(axis.title=element_text(size=10)) + theme(legend.text=element_text(size=11), legend.title=element_text(size=12), legend.background = element_rect(colour = "black")) + theme(panel.background=element_rect(fill=NA)) + theme(legend.position="bottom") + guides(fill = guide_legend(nrow = 1))
   if(geomtext){marker.plot <- marker.plot + geom_text(data=lead_marker, aes(x=label_pos,y=stats,label=marker), vjust=-1, hjust=0.5, size=4.5)}else{if(lead_marker$stats[1]/ylim>=0.3){marker.plot <- marker.plot + geom_label(data=lead_marker, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.05*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_label(data=lead_marker, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}
-  if(!is.null(highlights)){if(hightext){if(all(highlight_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.05*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}}
+  # if(!is.null(highlights)){if(hightext){if(all(highlight_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.05*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}}
+  if(!is.null(highlights)){if(hightext){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_text_repel(data=highlight_points, aes(x=x,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}
   if(type=="prob"){suppressMessages(marker.plot <- marker.plot + scale_y_continuous(limits=c(0,ylim), breaks=c(0, 0.25, 0.5, 0.75, 1)))}
   return(marker.plot)
 }
@@ -519,10 +520,10 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
   }
   if(!is.null(highlights)){
     highlight_points <- data[(data$marker %in% highlights),]
-    if(nrow(highlight_points)){
-      highlight_points$label_pos <- highlight_points$pos
-      highlight_points$label_pos[(x.max-highlight_points$pos)<10000] <- highlight_points$pos[(x.max-highlight_points$pos)<10000] - 0.025*(x.max-x.min)
-      highlight_points$label_pos[(highlight_points$pos-x.min)<10000] <- highlight_points$pos[(highlight_points$pos-x.min)<10000] + 0.025*(x.max-x.min)
+    if(nrow(highlight_points)>0){
+      # highlight_points$label_pos <- highlight_points$pos
+      # highlight_points$label_pos[(x.max-highlight_points$pos)<10000] <- highlight_points$pos[(x.max-highlight_points$pos)<10000] - 0.025*(x.max-x.min)
+      # highlight_points$label_pos[(highlight_points$pos-x.min)<10000] <- highlight_points$pos[(highlight_points$pos-x.min)<10000] + 0.025*(x.max-x.min)
       hightext <- T
     }else{
       hightext <- F  
@@ -539,7 +540,8 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
   ylim <- max((max(data$stats)+0.2*max(data$stats)),1)
   marker.plot <- ggplot(aes(x=pos,y=stats), data=data) + geom_point(aes(fill=r2), pch=21, size=3) + scale_fill_manual(values=c("#DCDCDC", "#66FFFF", "#66FF66", "#FFCC00", "#FF9933", "#CC3300"), drop=FALSE) + geom_point(data=lead_marker, aes(x=pos,y=stats), pch=23, colour="black", fill="purple", size=4) + theme_bw() +  ylab(ylab) + xlab(NULL) + scale_y_continuous(limits=c(0,ylim)) + theme(axis.title.y=element_text(vjust=2.25, size=14), axis.text=element_text(size=12)) + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + scale_x_continuous(limits=c(x.min, x.max), breaks=NULL) + theme(axis.title=element_text(size=10)) + theme(legend.text=element_text(size=10), legend.title=element_text(size=12), legend.background = element_rect(colour = "black")) + theme(panel.background=element_rect(fill=NA)) + theme(legend.position="bottom") + guides(fill = guide_legend(nrow = 1))
   if(geomtext){marker.plot <- marker.plot + geom_text(data=lead_marker, aes(x=label_pos,y=stats,label=marker), vjust=-1, hjust=0.5, size=4.5)}else{if(lead_marker$stats[1]/ylim>=0.3){marker.plot <- marker.plot + geom_label(data=lead_marker, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.1*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_label(data=lead_marker, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.1*ylim), size=4.5, alpha=1)}}
-  if(!is.null(highlights)){if(hightext){if(all(highlight_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.1*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.1*ylim), size=4.5, alpha=1)}}}
+  # if(!is.null(highlights)){if(hightext){if(all(highlight_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.1*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.1*ylim), size=4.5, alpha=1)}}}
+  if(!is.null(highlights)){if(hightext){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_text_repel(data=highlight_points, aes(x=x,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}
   if(type=="prob"){suppressMessages(marker.plot <- marker.plot + scale_y_continuous(limits=c(0,ylim), breaks=c(0, 0.25, 0.5, 0.75, 1)))}
   return(marker.plot)
 }
