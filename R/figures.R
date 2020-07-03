@@ -354,6 +354,8 @@ plot_assoc_combined <- function(recombination.plot, gene.plot, marker.plot, titl
   if(r2_legend==TRUE){
     lheight <- sum(legend$height)*1.5
     g <- grid.arrange(g, legend, ncol = 1, heights = unit.c(unit(1, "npc") - lheight, lheight))
+  }else{
+    g <- grid.arrange(g)
   }
   return(g)
 }
@@ -765,7 +767,7 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   if(r2_legend==T){
     combined.plot <- add_g_legend(g, legend)
   }else{
-    combined.plot <- g
+    combined.plot <- grid.arrange(g)
   }
 
   return(combined.plot)
