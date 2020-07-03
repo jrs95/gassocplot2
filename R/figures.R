@@ -451,8 +451,7 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   }else{data$stats <- data$prob}
   data <- data[,c("marker", "chr", "pos", "stats")]
   data$marker <- as.character(data$marker)
-  if(build==37){chr <- as.integer(data$chr[1])}
-  if(build==38){chr <- as.character(data$chr[1])}
+  chr <- as.character(data$chr[1])
   if(is.null(x.min)){x.min <- min(as.integer(data$pos))}
   if(is.null(x.max)){x.max <- max(as.integer(data$pos))}
   if((x.max - x.min)>10000000) stop("the plotting tool can plot a maximum of 10MB")
@@ -782,8 +781,7 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   
   # Coerce data
   markers$marker <- as.character(markers$marker)
-  if(build==37){chr <- as.integer(markers$chr[1])}
-  if(build==38){chr <- as.character(markers$chr[1])}
+  chr <- as.character(markers$chr[1])
   r2_legend <- legend
   if(is.null(x.min)){x.min <- min(as.integer(markers$pos))}
   if(is.null(x.max)){x.max <- max(as.integer(markers$pos))}
