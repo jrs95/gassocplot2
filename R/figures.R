@@ -211,10 +211,11 @@ plot_gene_fifteen <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
 #' @param ylab the y-axis label
 #' @param type the type of the plot either log10p or probabilities
 #' @param highlights additional points to highlight
+#' @param sig.thres significance threshold
 #' @import ggplot2
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p", highlights=NULL){
+plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p", highlights=NULL, sig.thres=NULL){
   
   # Error messages
   if(is.null(corr) & is.null(corr.top)) stop("no correlation statistics were input")
@@ -271,9 +272,14 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
   
   # Y-axis limit
   ylim <- max((max(data$stats)+0.1*max(data$stats)),1)
+  if(!is.null(sig.thres)){ylim <- max(ylim, (-log10(sig.thres) + -log10(sig.thres)*0.1))}
   
   # Plot
-  marker.plot <- ggplot(aes(x=pos, y=stats), data=data) + geom_point(aes(fill=r2), pch=21, size=3.5) + scale_fill_manual(values=c("#DCDCDC", "#66FFFF", "#66FF66", "#FFCC00", "#FF9933", "#CC3300"), drop=FALSE) 
+  marker.plot <- ggplot(aes(x=pos, y=stats), data=data)
+  if(!is.null(sig.thres)){
+    marker.plot <- marker.plot + geom_hline(yintercept=-log10(sig.thres), color="grey50", linetype="dashed")
+  }
+  marker.plot <- marker.plot + geom_point(aes(fill=r2), pch=21, size=3.5) + scale_fill_manual(values=c("#DCDCDC", "#66FFFF", "#66FF66", "#FFCC00", "#FF9933", "#CC3300"), drop=FALSE) 
   marker.plot <- marker.plot + geom_point(data=lead_marker, aes(pos,stats), pch=23, colour="black", fill="purple", size=4)  
   marker.plot <- marker.plot + theme_bw() + ylab(ylab) + xlab(NULL) + scale_x_continuous(limits=c(x.min,x.max), breaks=NULL) + scale_y_continuous(limits=c(0,ylim))
   marker.plot <- marker.plot + theme(axis.title.y=element_text(vjust=2.25, size=16), axis.text=element_text(size=14)) + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) 
@@ -419,10 +425,11 @@ plot_assoc_combined <- function(recombination.plot, gene.plot, marker.plot, titl
 #' @param legend add r2 legend
 #' @param build genome build
 #' @param highlights additional points to highlight
+#' @param sig.thres significance threshold
 #' @import ggplot2 grid gridExtra gtable
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, subtitle=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, highlights=NULL){
+assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, subtitle=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, highlights=NULL, sig.thres=NULL){
   
   # Error messages
   if(!(type=="log10p" | type=="prob")) stop("the type of plot has to be either log10p or prob")
@@ -455,6 +462,7 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   if(is.null(x.min)){x.min <- min(as.integer(data$pos))}
   if(is.null(x.max)){x.max <- max(as.integer(data$pos))}
   if((x.max - x.min)>10000000) stop("the plotting tool can plot a maximum of 10MB")
+  if(!is.null(sig.thres) & type!="log10p"){sig.thes <- NULL}
 
   # Genes
   if(build==37){gene.region <- gassocplot2::genes_b37[(gassocplot2::genes_b37$chr==chr & !(gassocplot2::genes_b37$end<x.min) & !(gassocplot2::genes_b37$start>x.max)),]}
@@ -485,7 +493,7 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   data$chr <- as.integer(data$chr)
   data$pos <- as.integer(data$pos)
   if(type=="log10p"){ylab <- expression("-log"["10"]*paste("(",italic("p"),")"))}else{if(is.null(ylab)){ylab <- "Probability"}}  
-  marker.plot <- plot_assoc(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, highlights)
+  marker.plot <- plot_assoc(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, highlights, sig.thres)
   
   # Combined plot
   combined.plot <- plot_assoc_combined(recombination.plot, gene.plot, marker.plot, title, subtitle, ngenes, legend)
@@ -528,10 +536,11 @@ assoc_plot_save <- function(x, file, width=9, height=7, dpi=500){
 #' @param ylab the y-axis label
 #' @param type the type of the plot either log10p or probabilities
 #' @param highlights additional points to highlight
+#' @param sig.thres significance threshold
 #' @import ggplot2
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p", highlights=NULL){
+plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p", highlights=NULL, sig.thres=NULL){
   
   # Error messages
   if(is.null(corr) & is.null(corr.top)) stop("no correlation statistics were input")
@@ -587,9 +596,14 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
   
   # Y-axis limit
   ylim <- max((max(data$stats)+0.2*max(data$stats)),1)
+  if(!is.null(sig.thres)){ylim <- max(ylim, (-log10(sig.thres) + -log10(sig.thres)*0.1))}
   
   # Plot
-  marker.plot <- ggplot(aes(x=pos,y=stats), data=data) + geom_point(aes(fill=r2), pch=21, size=3) + scale_fill_manual(values=c("#DCDCDC", "#66FFFF", "#66FF66", "#FFCC00", "#FF9933", "#CC3300"), drop=FALSE) 
+  marker.plot <- ggplot(aes(x=pos,y=stats), data=data) 
+  if(!is.null(sig.thres)){
+    marker.plot <- marker.plot + geom_hline(yintercept=-log10(sig.thres), color="grey50", linetype="dashed")
+  }
+  marker.plot <- marker.plot + geom_point(aes(fill=r2), pch=21, size=3) + scale_fill_manual(values=c("#DCDCDC", "#66FFFF", "#66FF66", "#FFCC00", "#FF9933", "#CC3300"), drop=FALSE) 
   marker.plot <- marker.plot + geom_point(data=lead_marker, aes(x=pos,y=stats), pch=23, colour="black", fill="purple", size=4) 
   marker.plot <- marker.plot + theme_bw() +  ylab(ylab) + xlab(NULL) + scale_x_continuous(limits=c(x.min, x.max), breaks=NULL) + scale_y_continuous(limits=c(0,ylim)) 
   marker.plot <- marker.plot + theme(axis.title.y=element_text(vjust=2.25, size=14), axis.text=element_text(size=12)) + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) 
@@ -755,10 +769,11 @@ add_g_legend <- function(g, legend){
 #' @param legend add r2 legend
 #' @param build genome build
 #' @param highlights additional points to highlight
+#' @param sig.thres significance threshold
 #' @import ggplot2 grid gridExtra gtable
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, highlights=NULL){
+stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, highlights=NULL, sig.thres=NULL){
   
   # Error messages
   if(!(type=="log10p" | type=="prob")) stop("the type of plot has to be either log10p or prob")
@@ -786,6 +801,7 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   if(is.null(x.min)){x.min <- min(as.integer(markers$pos))}
   if(is.null(x.max)){x.max <- max(as.integer(markers$pos))}
   if((x.max - x.min)>10000000) stop("the plotting tool can plot a maximum of 10MB")
+  if(!is.null(sig.thres) & type!="log10p"){sig.thes <- NULL}
   
   # mlog10p
   if(type=="log10p"){
@@ -829,7 +845,7 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
     }else{
       data <- data.frame(marker=markers$marker, chr=as.integer(markers$chr), pos=as.integer(markers$pos), stats=z[,i], stringsAsFactors=F)    
     }
-    marker.plot <- plot_assoc_stack(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, highlights)
+    marker.plot <- plot_assoc_stack(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, highlights, sig.thres)
     legend <- g_legend(marker.plot)
     if(i==length(traits)){g <- plot_regional_gene_assoc(recombination.plot, marker.plot, gene.plot, traits[i], ngenes)}
     if(i<length(traits)){
