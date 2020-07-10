@@ -4,7 +4,7 @@
 ## James Staley                                                       ##
 ## Email: jrstaley95@gmail.com                                        ##
 ##                                                                    ##
-## 03/07/20                                                           ##
+## 10/07/20                                                           ##
 ########################################################################
 
 ##########################################################
@@ -18,7 +18,7 @@
 #' @param x.min start of region
 #' @param x.max end of region
 #' @param build genome build
-#' @import ggplot2
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_recombination_rate <- function(chr, x.min, x.max, build=37) {
@@ -38,7 +38,7 @@ plot_recombination_rate <- function(chr, x.min, x.max, build=37) {
 #' @param x.min start of region
 #' @param x.max end of region
 #' @param build genome build
-#' @import ggplot2
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_recombination_rate_stack <- function(chr, x.min, x.max, build=37) {
@@ -61,7 +61,7 @@ plot_recombination_rate_stack <- function(chr, x.min, x.max, build=37) {
 #' @param chr chromosome
 #' @param x.min start of region
 #' @param x.max end of region
-#' @import ggplot2
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_gene_zero <- function(chr, x.min, x.max, stack=FALSE){
@@ -82,7 +82,7 @@ plot_gene_zero <- function(chr, x.min, x.max, stack=FALSE){
 #' @param chr chromosome
 #' @param x.min start of region
 #' @param x.max end of region
-#' @import ggplot2
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_gene_two <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
@@ -112,7 +112,7 @@ plot_gene_two <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
 #' @param chr chromosome
 #' @param x.min start of region
 #' @param x.max end of region
-#' @import ggplot2
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_gene_five <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
@@ -142,7 +142,7 @@ plot_gene_five <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
 #' @param chr chromosome
 #' @param x.min start of region
 #' @param x.max end of region
-#' @import ggplot2
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_gene_ten <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
@@ -172,7 +172,7 @@ plot_gene_ten <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
 #' @param chr chromosome
 #' @param x.min start of region
 #' @param x.max end of region
-#' @import ggplot2
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_gene_fifteen <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
@@ -210,12 +210,15 @@ plot_gene_fifteen <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
 #' @param top.marker the top associated marker, i.e. the marker with the largest -log10p or probability
 #' @param ylab the y-axis label
 #' @param type the type of the plot either log10p or probabilities
-#' @param highlights additional points to highlight
+#' @param labels additional points to label
 #' @param sig.thres significance threshold
-#' @import ggplot2
+#' @param point.padding point padding on labels
+#' @param nudge_x nudge x position on labels
+#' @param nudge_y nudge y position on labels
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p", highlights=NULL, sig.thres=NULL){
+plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p", labels=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0){
   
   # Error messages
   if(is.null(corr) & is.null(corr.top)) stop("no correlation statistics were input")
@@ -247,16 +250,16 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
     geomtext <- T
   }
   
-  # Highlight points
-  if(!is.null(highlights)){
-    highlight_points <- data[(data$marker %in% highlights),]
-    if(nrow(highlight_points)>0){
-      hightext <- T
+  # Label points
+  if(!is.null(labels)){
+    label_points <- data[(data$marker %in% labels),]
+    if(nrow(label_points)>0){
+      labeltext <- T
       if(geomtext==F){
-        highlight_points <- rbind(lead_marker[,!(names(lead_marker) %in% c("label_pos"))], highlight_points)
+        label_points <- rbind(lead_marker[,!(names(lead_marker) %in% c("label_pos"))], label_points)
       }
     }else{
-      hightext <- F  
+      labeltext <- F  
     }
   }
   
@@ -286,22 +289,22 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
   marker.plot <- marker.plot + theme(legend.text=element_text(size=11), legend.title=element_text(size=12), legend.background = element_rect(colour = "black")) + theme(panel.background=element_rect(fill=NA)) + theme(legend.position="bottom") + guides(fill = guide_legend(nrow = 1))
   if(geomtext){
     marker.plot <- marker.plot + geom_text(data=lead_marker, aes(x=label_pos,y=stats,label=marker), vjust=-1, hjust=0.5, size=4.5)
-    if(!is.null(highlights)){
-      if(hightext){
-        marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
-        marker.plot <- marker.plot + geom_label_repel(data=highlight_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)
+    if(!is.null(labels)){
+      if(labeltext){
+        marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
+        marker.plot <- marker.plot + geom_label_repel(data=label_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
       }
     }
   }else{
-   if(!is.null(highlights)){
-      if(hightext){
-        marker.plot <- marker.plot + geom_point(data=highlight_points[-1,], aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
-        marker.plot <- marker.plot + geom_label_repel(data=highlight_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)
+   if(!is.null(labels)){
+      if(labeltext){
+        marker.plot <- marker.plot + geom_point(data=label_points[-1,], aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
+        marker.plot <- marker.plot + geom_label_repel(data=label_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
       }else{
-        marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)
+        marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
       }
     }else{
-      marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)   
+      marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)   
     }
   }
   # if(!is.null(highlights)){if(hightext){if(all(highlight_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.05*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}}
@@ -319,7 +322,7 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
 #'
 #' g_legend 
 #' @param gplot a ggplot
-#' @import ggplot2 grid gridExtra gtable
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 g_legend<-function(gplot){
@@ -424,12 +427,15 @@ plot_assoc_combined <- function(recombination.plot, gene.plot, marker.plot, titl
 #' @param top.marker the top associated marker, i.e. the marker with the largest -log10p or probability
 #' @param legend add r2 legend
 #' @param build genome build
-#' @param highlights additional points to highlight
+#' @param labels additional points to label
 #' @param sig.thres significance threshold
-#' @import ggplot2 grid gridExtra gtable
+#' @param point.padding point padding on labels
+#' @param nudge_x nudge x position on labels
+#' @param nudge_y nudge y position on labels
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, subtitle=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, highlights=NULL, sig.thres=NULL){
+assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, subtitle=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, labels=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0){
   
   # Error messages
   if(!(type=="log10p" | type=="prob")) stop("the type of plot has to be either log10p or prob")
@@ -493,7 +499,7 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   data$chr <- as.integer(data$chr)
   data$pos <- as.integer(data$pos)
   if(type=="log10p"){ylab <- expression("-log"["10"]*paste("(",italic("p"),")"))}else{if(is.null(ylab)){ylab <- "Probability"}}  
-  marker.plot <- plot_assoc(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, highlights, sig.thres)
+  marker.plot <- plot_assoc(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, labels, sig.thres, point.padding, nudge_x, nudge_y)
   
   # Combined plot
   combined.plot <- plot_assoc_combined(recombination.plot, gene.plot, marker.plot, title, subtitle, ngenes, legend)
@@ -535,12 +541,15 @@ assoc_plot_save <- function(x, file, width=9, height=7, dpi=500){
 #' @param top.marker the top associated marker, i.e. the marker with the largest -log10p or probability
 #' @param ylab the y-axis label
 #' @param type the type of the plot either log10p or probabilities
-#' @param highlights additional points to highlight
+#' @param labels additional points to label
 #' @param sig.thres significance threshold
-#' @import ggplot2
+#' @param point.padding point padding on labels
+#' @param nudge_x nudge x position on labels
+#' @param nudge_y nudge y position on labels
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p", highlights=NULL, sig.thres=NULL){
+plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p", labels=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0){
   
   # Error messages
   if(is.null(corr) & is.null(corr.top)) stop("no correlation statistics were input")
@@ -571,16 +580,16 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
     geomtext <- T
   }
   
-  # Highlighted points
-  if(!is.null(highlights)){
-    highlight_points <- data[(data$marker %in% highlights),]
-    if(nrow(highlight_points)>0){
-      hightext <- T
+  # Label points
+  if(!is.null(labels)){
+    label_points <- data[(data$marker %in% labels),]
+    if(nrow(label_points)>0){
+      labeltext <- T
       if(geomtext==F){
-        highlight_points <- rbind(lead_marker[,!(names(lead_marker) %in% c("label_pos"))], highlight_points)
+        label_points <- rbind(lead_marker[,!(names(lead_marker) %in% c("label_pos"))], label_points)
       }
     }else{
-      hightext <- F  
+      labeltext <- F  
     }
   }
   
@@ -611,22 +620,22 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
   # if(geomtext){marker.plot <- marker.plot + geom_text(data=lead_marker, aes(x=label_pos,y=stats,label=marker), vjust=-1, hjust=0.5, size=4.5)}else{if(lead_marker$stats[1]/ylim>=0.3){marker.plot <- marker.plot + geom_label(data=lead_marker, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.1*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_label(data=lead_marker, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.1*ylim), size=4.5, alpha=1)}}
   if(geomtext){
     marker.plot <- marker.plot + geom_text(data=lead_marker, aes(x=label_pos,y=stats,label=marker), vjust=-1, hjust=0.5, size=4.5)
-    if(!is.null(highlights)){
-      if(hightext){
-        marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
-        marker.plot <- marker.plot + geom_label_repel(data=highlight_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)
+    if(!is.null(labels)){
+      if(labeltext){
+        marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
+        marker.plot <- marker.plot + geom_label_repel(data=label_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
       }
     }
   }else{
-   if(!is.null(highlights)){
-      if(hightext){
-        marker.plot <- marker.plot + geom_point(data=highlight_points[-1,], aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
-        marker.plot <- marker.plot + geom_label_repel(data=highlight_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)
+   if(!is.null(labels)){
+      if(labeltext){
+        marker.plot <- marker.plot + geom_point(data=label_points[-1,], aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
+        marker.plot <- marker.plot + geom_label_repel(data=label_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
       }else{
-        marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)
+        marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
       }
     }else{
-      marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)   
+      marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)   
     }
   }
   # if(!is.null(highlights)){if(hightext){if(all(highlight_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.1*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.1*ylim), size=4.5, alpha=1)}}}
@@ -646,7 +655,7 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
 #' @param recombination.plot recombination plot 
 #' @param marker.plot association scatter plot
 #' @param title title of the plot
-#' @import ggplot2 grid gridExtra gtable
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_regional_assoc <- function(recombination.plot, marker.plot, title){
@@ -686,7 +695,7 @@ plot_regional_assoc <- function(recombination.plot, marker.plot, title){
 #' @param marker.plot association scatter plot
 #' @param title title of the plot
 #' @param ngenes number of genes in the genomic region
-#' @import ggplot2 grid gridExtra gtable
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_regional_gene_assoc <- function(recombination.plot, marker.plot, gene.plot, title, ngenes){
@@ -740,7 +749,7 @@ plot_regional_gene_assoc <- function(recombination.plot, marker.plot, gene.plot,
 #' add_g_legend
 #' @param g a ggplot
 #' @param legend legend
-#' @import ggplot2 grid gridExtra gtable
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 add_g_legend <- function(g, legend){
@@ -768,12 +777,15 @@ add_g_legend <- function(g, legend){
 #' @param top.marker the top associated marker, i.e. the marker with the largest -log10p or probability
 #' @param legend add r2 legend
 #' @param build genome build
-#' @param highlights additional points to highlight
+#' @param labels additional points to label
 #' @param sig.thres significance threshold
-#' @import ggplot2 grid gridExtra gtable
+#' @param point.padding point padding on labels
+#' @param nudge_x nudge x position on labels
+#' @param nudge_y nudge y position on labels
+#' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, highlights=NULL, sig.thres=NULL){
+stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, highlights=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0){
   
   # Error messages
   if(!(type=="log10p" | type=="prob")) stop("the type of plot has to be either log10p or prob")
@@ -845,7 +857,7 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
     }else{
       data <- data.frame(marker=markers$marker, chr=as.integer(markers$chr), pos=as.integer(markers$pos), stats=z[,i], stringsAsFactors=F)    
     }
-    marker.plot <- plot_assoc_stack(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, highlights, sig.thres)
+    marker.plot <- plot_assoc_stack(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, highlights, sig.thres, point.padding, nudge_x, nudge_y)
     legend <- g_legend(marker.plot)
     if(i==length(traits)){g <- plot_regional_gene_assoc(recombination.plot, marker.plot, gene.plot, traits[i], ngenes)}
     if(i<length(traits)){
