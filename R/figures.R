@@ -289,19 +289,19 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
     if(!is.null(highlights)){
       if(hightext){
         marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
-        marker.plot <- marker.plot + geom_label_repel(data=highlight_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.15)
+        marker.plot <- marker.plot + geom_label_repel(data=highlight_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)
       }
     }
   }else{
    if(!is.null(highlights)){
       if(hightext){
         marker.plot <- marker.plot + geom_point(data=highlight_points[-1,], aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
-        marker.plot <- marker.plot + geom_label_repel(data=highlight_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.15)
+        marker.plot <- marker.plot + geom_label_repel(data=highlight_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)
       }else{
-        marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.15)
+        marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)
       }
     }else{
-      marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.15)   
+      marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)   
     }
   }
   # if(!is.null(highlights)){if(hightext){if(all(highlight_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.05*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}}
@@ -614,19 +614,19 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
     if(!is.null(highlights)){
       if(hightext){
         marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
-        marker.plot <- marker.plot + geom_label_repel(data=highlight_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.15)
+        marker.plot <- marker.plot + geom_label_repel(data=highlight_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)
       }
     }
   }else{
    if(!is.null(highlights)){
       if(hightext){
         marker.plot <- marker.plot + geom_point(data=highlight_points[-1,], aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
-        marker.plot <- marker.plot + geom_label_repel(data=highlight_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.15)
+        marker.plot <- marker.plot + geom_label_repel(data=highlight_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)
       }else{
-        marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.15)
+        marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)
       }
     }else{
-      marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.15)   
+      marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=0.25)   
     }
   }
   # if(!is.null(highlights)){if(hightext){if(all(highlight_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.1*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.1*ylim), size=4.5, alpha=1)}}}
