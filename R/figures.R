@@ -307,8 +307,7 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
       marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)   
     }
   }
-  # if(!is.null(highlights)){if(hightext){if(all(highlight_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.05*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}}
-  # if(!is.null(highlights)){if(hightext){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label_repel(data=highlight_points, aes(x=pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}
+  # if(!is.null(labels)){if(labeltext){if(all(label_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.05*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}}
   if(type=="prob"){suppressMessages(marker.plot <- marker.plot + scale_y_continuous(limits=c(0,ylim), breaks=c(0, 0.25, 0.5, 0.75, 1)))}
   
   return(marker.plot)
@@ -617,7 +616,6 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
   marker.plot <- marker.plot + theme_bw() +  ylab(ylab) + xlab(NULL) + scale_x_continuous(limits=c(x.min, x.max), breaks=NULL) + scale_y_continuous(limits=c(0,ylim)) 
   marker.plot <- marker.plot + theme(axis.title.y=element_text(vjust=2.25, size=14), axis.text=element_text(size=12)) + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) 
   marker.plot <- marker.plot + theme(legend.text=element_text(size=10), legend.title=element_text(size=12), legend.background = element_rect(colour = "black")) + theme(panel.background=element_rect(fill=NA)) + theme(legend.position="bottom") + guides(fill = guide_legend(nrow = 1))
-  # if(geomtext){marker.plot <- marker.plot + geom_text(data=lead_marker, aes(x=label_pos,y=stats,label=marker), vjust=-1, hjust=0.5, size=4.5)}else{if(lead_marker$stats[1]/ylim>=0.3){marker.plot <- marker.plot + geom_label(data=lead_marker, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.1*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_label(data=lead_marker, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.1*ylim), size=4.5, alpha=1)}}
   if(geomtext){
     marker.plot <- marker.plot + geom_text(data=lead_marker, aes(x=label_pos,y=stats,label=marker), vjust=-1, hjust=0.5, size=4.5)
     if(!is.null(labels)){
@@ -638,8 +636,7 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
       marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)   
     }
   }
-  # if(!is.null(highlights)){if(hightext){if(all(highlight_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.1*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=highlight_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.1*ylim), size=4.5, alpha=1)}}}
-  # if(!is.null(highlights)){if(hightext){marker.plot <- marker.plot + geom_point(data=highlight_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label_repel(data=highlight_points, aes(x=pos,y=stats,label=marker), nudge_y=(0.1*ylim), size=4.5, point.padding=0.25)}}
+  # if(!is.null(labels)){if(labeltext){if(all(label_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.1*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.1*ylim), size=4.5, alpha=1)}}}
   if(type=="prob"){suppressMessages(marker.plot <- marker.plot + scale_y_continuous(limits=c(0,ylim), breaks=c(0, 0.25, 0.5, 0.75, 1)))}
   
   return(marker.plot)
@@ -785,7 +782,7 @@ add_g_legend <- function(g, legend){
 #' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, highlights=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0){
+stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, labels=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0){
   
   # Error messages
   if(!(type=="log10p" | type=="prob")) stop("the type of plot has to be either log10p or prob")
@@ -857,7 +854,7 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
     }else{
       data <- data.frame(marker=markers$marker, chr=as.integer(markers$chr), pos=as.integer(markers$pos), stats=z[,i], stringsAsFactors=F)    
     }
-    marker.plot <- plot_assoc_stack(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, highlights, sig.thres, point.padding, nudge_x, nudge_y)
+    marker.plot <- plot_assoc_stack(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, labels, sig.thres, point.padding, nudge_x, nudge_y)
     legend <- g_legend(marker.plot)
     if(i==length(traits)){g <- plot_regional_gene_assoc(recombination.plot, marker.plot, gene.plot, traits[i], ngenes)}
     if(i<length(traits)){
