@@ -6,7 +6,8 @@
 \usage{
 stack_assoc_plot(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL,
   type="log10p", x.min = NULL, x.max = NULL, top.marker = NULL, legend=TRUE,
-  build=37, labels=NULL)
+  build=37, labels=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0,
+  nudge_y=0)
 }
 \arguments{
 \item{markers}{data.frame of markers with markername (marker), chromosome (chr) and position (pos)}
