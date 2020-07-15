@@ -6,7 +6,7 @@
 \usage{
 stack_assoc_plot(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL,
   type="log10p", x.min = NULL, x.max = NULL, top.marker = NULL, legend=TRUE,
-  build=37, highlights=NULL)
+  build=37, labels=NULL)
 }
 \arguments{
 \item{markers}{data.frame of markers with markername (marker), chromosome (chr) and position (pos)}
@@ -33,7 +33,15 @@ stack_assoc_plot(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL,
 
 \item{build}{genome build}
 
-\item{highlights}{additional points to highlight}
+\item{labels}{additional points to label}
+
+\item{sig.thres}{significance threshold}
+
+\item{point.padding}{point padding on labels}
+
+\item{nudge_x}{nudge x position on labels}
+
+\item{nudge_y}{nudge y position on labels}
 }
 \description{
 stack_assoc_plot plots stacked regional association plots
