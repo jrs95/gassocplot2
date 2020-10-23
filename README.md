@@ -20,6 +20,7 @@ head(markers)
 corr <- gassocplot2::test_corr # this is correlation not correlation squared  
 plot <- assoc_plot(markers, corr)   
 assoc_plot_save(plot, "assoc_plot_test.png")  
+plot <- assoc_plot(markers, corr, label="rs4252185")  
 
 \#\#\# stack_assoc_plot  
 markers <- gassocplot2::test_stack_assoc_plot_markers  
