@@ -44,7 +44,7 @@ Please cite this R package using the link: https://github.com/jrs95/gassocplot2
 ![](https://raw.githubusercontent.com/jrs95/utilities/master/assoc_plot_test.png?raw=true)
 
 ### Regional association plot with additonal label
-![](https://raw.githubusercontent.com/jrs95/utilities/master/assoc_plot_test.png?raw=true)
+![](https://raw.githubusercontent.com/jrs95/utilities/master/assoc_plot_test_label.png?raw=true)
 
 ### Stacked regional association plot
 ![](https://raw.githubusercontent.com/jrs95/utilities/master/stack_assoc_plot_test.png?raw=true)
