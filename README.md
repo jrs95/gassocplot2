@@ -21,7 +21,7 @@ corr <- gassocplot2::test_corr # this is correlation not correlation squared and
 plot <- assoc_plot(markers, corr)   
 assoc_plot_save(plot, "assoc_plot_test.png", width=11)  
 plot <- assoc_plot(markers, corr, label="rs2315065") # add additional variant label  
-assoc_plot_save(plot, "assoc_plot_test_label.png", width=11)  
+assoc_plot_save(plot, "assoc_plot_test_add_label.png", width=11)  
 
 \#\#\# stack_assoc_plot  
 markers <- gassocplot2::test_stack_assoc_plot_markers  
@@ -44,7 +44,7 @@ Please cite this R package using the link: https://github.com/jrs95/gassocplot2
 ![](https://raw.githubusercontent.com/jrs95/utilities/master/assoc_plot_test.png?raw=true)
 
 ### Regional association plot with additonal label
-![](https://raw.githubusercontent.com/jrs95/utilities/master/assoc_plot_test_label.png?raw=true)
+![](https://raw.githubusercontent.com/jrs95/utilities/master/assoc_plot_test_add_label.png?raw=true)
 
 ### Stacked regional association plot
 ![](https://raw.githubusercontent.com/jrs95/utilities/master/stack_assoc_plot_test.png?raw=true)
