@@ -14,9 +14,9 @@ stack_assoc_plot(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL,
 
 \item{z}{matrix of Z-scores or probabilities with one column for each trait}
 
-\item{corr}{(Pearson) correlation matrix between markers (i.e. r not r2)}
+\item{corr}{(Pearson) correlation matrix between markers (i.e. r not r2) with the markers ordered in the same way as in data}
 
-\item{corr.top}{(Pearson) correlation statistics between the top marker and the rest of the markers (i.e. r not r2)}
+\item{corr.top}{(Pearson) correlation statistics between the top marker and the rest of the markers (i.e. r not r2) with the markers ordered in the same way as in data}
   
 \item{traits}{trait names}
 
