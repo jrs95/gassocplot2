@@ -20,7 +20,7 @@ head(markers)
 corr <- gassocplot2::test_corr # this is correlation not correlation squared and has to be ordered in the same way as the markers data frame  
 plot <- assoc_plot(markers, corr)   
 assoc_plot_save(plot, "assoc_plot_test.png")  
-plot <- assoc_plot(markers, corr, label="rs4252185") # add additional variant label  
+plot <- assoc_plot(markers, corr, label="rs2315065") # add additional variant label  
 assoc_plot_save(plot, "assoc_plot_test_label.png")  
 
 \#\#\# stack_assoc_plot  
