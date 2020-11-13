@@ -24,7 +24,6 @@
 plot_recombination_rate <- function(chr, x.min, x.max, build=37) {
   if(build==37){recombination.data <- gassocplot2::genetic_map_b37[(gassocplot2::genetic_map_b37$chr==chr & gassocplot2::genetic_map_b37$pos>=x.min & gassocplot2::genetic_map_b37$pos<=x.max),]}
   if(build==38){recombination.data <- gassocplot2::genetic_map_b38[(gassocplot2::genetic_map_b38$chr==chr & gassocplot2::genetic_map_b38$pos>=x.min & gassocplot2::genetic_map_b38$pos<=x.max),]}
-  recombination.data$combined_rate[recombination.data$combined_rate>100] <- 100
   recomb.df <- data.frame(coordinates=recombination.data$pos, y=recombination.data$combined_rate, panel="Recombination Rate", stringsAsFactors=F)
   cols <- c("Recomb. rate"="black","Gene"="#FF3D14","Exon"="#66A300")
   recomb.plot <- ggplot(data = recomb.df, aes(x=coordinates, y=y, colour="black")) + 
@@ -45,7 +44,6 @@ plot_recombination_rate <- function(chr, x.min, x.max, build=37) {
 plot_recombination_rate_stack <- function(chr, x.min, x.max, build=37) {
   if(build==37){recombination.data <- gassocplot2::genetic_map_b37[(gassocplot2::genetic_map_b37$chr==chr & gassocplot2::genetic_map_b37$pos>=x.min & gassocplot2::genetic_map_b37$pos<=x.max),]}
   if(build==38){recombination.data <- gassocplot2::genetic_map_b38[(gassocplot2::genetic_map_b38$chr==chr & gassocplot2::genetic_map_b38$pos>=x.min & gassocplot2::genetic_map_b38$pos<=x.max),]}
-  recombination.data$combined_rate[recombination.data$combined_rate>100] <- 100
   recomb.df <- data.frame(coordinates=recombination.data$pos, y=recombination.data$combined_rate, panel="Recombination Rate", stringsAsFactors=F)
   cols <- c("Recomb. rate"="black","Gene"="#FF3D14","Exon"="#66A300")
   recomb.plot <- ggplot(data = recomb.df, aes(x=coordinates, y=y, colour="black")) + 
