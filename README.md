@@ -19,9 +19,9 @@ markers <- gassocplot2::test_assoc_plot
 head(markers)  
 corr <- gassocplot2::test_corr # this is correlation not correlation squared and has to be ordered in the same way as the markers data frame  
 plot <- assoc_plot(markers, corr)   
-assoc_plot_save(plot, "assoc_plot_test.png", width=11)  
+assoc_plot_save(plot, "assoc_plot_test.png")  
 plot <- assoc_plot(markers, corr, label="rs2315065") # add additional variant label  
-assoc_plot_save(plot, "assoc_plot_test_add_label.png", width=11)  
+assoc_plot_save(plot, "assoc_plot_test_add_label.png")  
 
 \#\#\# stack_assoc_plot  
 markers <- gassocplot2::test_stack_assoc_plot_markers  
@@ -30,7 +30,7 @@ z <- gassocplot2::test_stack_assoc_plot_associations
 head(z)  
 corr <- gassocplot2::test_corr # this is correlation not correlation squared and has to be ordered in the same way as the markers data frame  
 plot <- stack_assoc_plot(markers, z, corr, traits=c("Trait 1", "Trait 2"))  
-stack_assoc_plot_save(plot, "stack_assoc_plot_test.png", 2, width=11)
+stack_assoc_plot_save(plot, "stack_assoc_plot_test.png", 2)
 
 ## Linkage disequilibrium information
 The [LDlinkR](https://cran.r-project.org/web/packages/LDlinkR/index.html) package can be used to obtain linkage disequilibrium matrices from 1000G using the LDmatrix function. Note the matrix from this function would have to be square rooted and ordered in the same way as the markers data frame.  
