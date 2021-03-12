@@ -25,9 +25,9 @@ plot_recombination_rate <- function(chr, x.min, x.max, build=37) {
   if(build==37){recombination.data <- gassocplot2::genetic_map_b37[(gassocplot2::genetic_map_b37$chr==chr & gassocplot2::genetic_map_b37$pos>=x.min & gassocplot2::genetic_map_b37$pos<=x.max),]}
   if(build==38){recombination.data <- gassocplot2::genetic_map_b38[(gassocplot2::genetic_map_b38$chr==chr & gassocplot2::genetic_map_b38$pos>=x.min & gassocplot2::genetic_map_b38$pos<=x.max),]}
   recomb.df <- data.frame(coordinates=recombination.data$pos, y=recombination.data$combined_rate, panel="Recombination Rate", stringsAsFactors=F)
-  cols <- c("Recomb. rate"="black","Gene"="#FF3D14","Exon"="#66A300")
-  recomb.plot <- ggplot(data = recomb.df, aes(x=coordinates, y=y, colour="black")) + 
-  geom_line(aes(colour="black"), colour="steelblue1") + scale_y_continuous(breaks=c(0,25,50,75,100), limits=c(0,100)) + xlab(NULL) + scale_x_continuous(limits=c(x.min,x.max), breaks=NULL) + ylab("Recomb. Rate") + theme_bw() + theme(axis.title.y=element_text(vjust=1.5), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + theme(axis.title=element_text(size=16), axis.text=element_text(size=14)) + theme(panel.background = element_rect(fill = NA))
+  # cols <- c("Recomb. rate"="black","Gene"="#FF3D14","Exon"="#66A300")
+  recomb.plot <- ggplot(data = recomb.df, aes(x=coordinates, y=y)) + 
+  geom_line(colour="steelblue1") + scale_y_continuous(breaks=c(0,25,50,75,100), limits=c(0,100)) + xlab(NULL) + scale_x_continuous(limits=c(x.min,x.max), breaks=NULL) + ylab("Recomb. Rate") + theme_bw() + theme(axis.title.y=element_text(vjust=1.5), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + theme(axis.title=element_text(size=16), axis.text=element_text(size=14)) + theme(panel.background = element_rect(fill = NA))
   return(recomb.plot)
 }
 
@@ -45,9 +45,9 @@ plot_recombination_rate_stack <- function(chr, x.min, x.max, build=37) {
   if(build==37){recombination.data <- gassocplot2::genetic_map_b37[(gassocplot2::genetic_map_b37$chr==chr & gassocplot2::genetic_map_b37$pos>=x.min & gassocplot2::genetic_map_b37$pos<=x.max),]}
   if(build==38){recombination.data <- gassocplot2::genetic_map_b38[(gassocplot2::genetic_map_b38$chr==chr & gassocplot2::genetic_map_b38$pos>=x.min & gassocplot2::genetic_map_b38$pos<=x.max),]}
   recomb.df <- data.frame(coordinates=recombination.data$pos, y=recombination.data$combined_rate, panel="Recombination Rate", stringsAsFactors=F)
-  cols <- c("Recomb. rate"="black","Gene"="#FF3D14","Exon"="#66A300")
-  recomb.plot <- ggplot(data = recomb.df, aes(x=coordinates, y=y, colour="black")) + 
-  geom_line(aes(colour="black"), colour="steelblue1") + scale_y_continuous(breaks=c(0,25,50,75,100), limits=c(0,100)) + xlab(NULL) + scale_x_continuous(limits=c(x.min,x.max), breaks=NULL) + ylab("Recomb. Rate") + theme_bw() + theme(axis.title.y=element_text(vjust=1.5), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + theme(axis.title=element_text(size=14), axis.text=element_text(size=12)) + theme(panel.background = element_rect(fill = NA))
+  # cols <- c("Recomb. rate"="black","Gene"="#FF3D14","Exon"="#66A300")
+  recomb.plot <- ggplot(data = recomb.df, aes(x=coordinates, y=y)) + 
+  geom_line(colour="steelblue1") + scale_y_continuous(breaks=c(0,25,50,75,100), limits=c(0,100)) + xlab(NULL) + scale_x_continuous(limits=c(x.min,x.max), breaks=NULL) + ylab("Recomb. Rate") + theme_bw() + theme(axis.title.y=element_text(vjust=1.5), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + theme(axis.title=element_text(size=14), axis.text=element_text(size=12)) + theme(panel.background = element_rect(fill = NA))
   return(recomb.plot)
 }
 
@@ -93,13 +93,13 @@ plot_gene_two <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
   genes.start.stop <- as.matrix(gene.region[, c("start", "end")])  
   genes.df.pos <- data.frame(name=paste0("gene",rep(1:nrow(genes.start.stop), each=2)), pos=as.vector(t(genes.start.stop)), y=(16 - 8*rep(rep(1:2, each=2), ceiling(nrow(genes.start.stop)/2))[1:(2*nrow(genes.start.stop))]), stringsAsFactors=F)
   # plot.pos <- ggplot(data=genes.df.pos, aes(x=pos, y=y)) + geom_point(data=genes.df.pos, mapping=aes(x=pos, y=y, group=name), color="blue4", size=0.5, shape=15) + theme_bw() + xlab(paste0("Position on chromosome ", chr)) + ylab(" ") +  scale_y_continuous(limits=c(-5,17), breaks=c(8,16), labels=c("      ", "      ")) + theme(axis.title.y=element_text(vjust=2), axis.title.x=element_text(vjust=-0.5), axis.ticks.y = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + scale_x_continuous(limits=c(x.min, x.max))
-  plot.pos <- ggplot(data=genes.df.pos, aes(x=pos, y=y)) + theme_bw() + xlab(paste0("Position on chromosome ", chr)) + ylab(" ") +  scale_y_continuous(limits=c(-5,17), breaks=c(8,16), labels=c("      ", "      ")) + theme(axis.title.y=element_text(vjust=2), axis.title.x=element_text(vjust=-0.5), axis.ticks.y = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + scale_x_continuous(limits=c(x.min, x.max))
+  plot.pos <- ggplot(data=genes.df.pos, mapping=aes(x=pos, y=y)) + theme_bw() + xlab(paste0("Position on chromosome ", chr)) + ylab(" ") +  scale_y_continuous(limits=c(-5,17), breaks=c(8,16), labels=c("      ", "      ")) + theme(axis.title.y=element_text(vjust=2), axis.title.x=element_text(vjust=-0.5), axis.ticks.y = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + scale_x_continuous(limits=c(x.min, x.max))
   if(stack==TRUE){
     plot.pos <- plot.pos + theme(axis.title=element_text(size=14), axis.text=element_text(size=12))
   }else{
     plot.pos <- plot.pos + theme(axis.title=element_text(size=16), axis.text=element_text(size=14))
   }
-  plot.genes <- plot.pos + geom_line(data=genes.df.pos, aes(x=pos, y=y, group=name), colour="blue4", size=0.8) 
+  plot.genes <- plot.pos + geom_line(data=genes.df.pos, mapping=aes(x=pos, y=y, group=name), colour="blue4", size=0.8) 
   genes.df.mid.point <- data.frame(name=gene.region$gene, x=as.numeric(gene.region$mid.point), y=(16 - 8*rep(rep(1:2, each=1), ceiling(nrow(gene.region)/2))[1:nrow(gene.region)] + 3.6), stringsAsFactors=F)
   plot.genes <- plot.genes + geom_text(data=genes.df.mid.point, mapping=aes(x=x, y=y, label=name), color="black", size=4, fontface=3) 
   return(plot.genes)
@@ -123,13 +123,13 @@ plot_gene_five <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
   genes.start.stop <- as.matrix(gene.region[, c("start", "end")])
   genes.df.pos <- data.frame(name=paste0("gene",rep(1:nrow(genes.start.stop), each=2)), pos=as.vector(t(genes.start.stop)), y=(40 - 8*rep(rep(1:5, each=2), ceiling(nrow(genes.start.stop)/5))[1:(2*nrow(genes.start.stop))]), stringsAsFactors=F)
   # plot.pos <- ggplot(data=genes.df.pos, aes(x=pos, y=y)) + geom_point(data=genes.df.pos, mapping=aes(x=pos, y=y, group=name), color="blue4", size=0.5, shape=15) + theme_bw() + xlab(paste0("Position on chromosome ", chr)) + ylab(" ") +  scale_y_continuous(limits=c(-1,41), breaks=c(8,16), labels=c("      ", "      ")) + theme(axis.title.y=element_text(vjust=2), axis.title.x=element_text(vjust=-0.5), axis.ticks.y = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + scale_x_continuous(limits=c(x.min, x.max))
-  plot.pos <- ggplot(data=genes.df.pos, aes(x=pos, y=y)) + theme_bw() + xlab(paste0("Position on chromosome ", chr)) + ylab(" ") +  scale_y_continuous(limits=c(-1,41), breaks=c(8,16), labels=c("      ", "      ")) + theme(axis.title.y=element_text(vjust=2), axis.title.x=element_text(vjust=-0.5), axis.ticks.y = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + scale_x_continuous(limits=c(x.min, x.max))
+  plot.pos <- ggplot(data=genes.df.pos, mapping=aes(x=pos, y=y)) + theme_bw() + xlab(paste0("Position on chromosome ", chr)) + ylab(" ") +  scale_y_continuous(limits=c(-1,41), breaks=c(8,16), labels=c("      ", "      ")) + theme(axis.title.y=element_text(vjust=2), axis.title.x=element_text(vjust=-0.5), axis.ticks.y = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + scale_x_continuous(limits=c(x.min, x.max))
   if(stack==TRUE){
     plot.pos <- plot.pos + theme(axis.title=element_text(size=14), axis.text=element_text(size=12))
   }else{
     plot.pos <- plot.pos + theme(axis.title=element_text(size=16), axis.text=element_text(size=14))
   }
-  plot.genes <- plot.pos + geom_line(data=genes.df.pos, aes(x=pos, y=y, group=name), colour="blue4", size=0.8) 
+  plot.genes <- plot.pos + geom_line(data=genes.df.pos, mapping=aes(x=pos, y=y, group=name), colour="blue4", size=0.8) 
   genes.df.mid.point <- data.frame(name=gene.region$gene, x=as.numeric(gene.region$mid.point), y=(40 - 8*rep(rep(1:5, each=1), ceiling(nrow(gene.region)/5))[1:nrow(gene.region)] + 3.7), stringsAsFactors=F)
   plot.genes <- plot.genes + geom_text(data=genes.df.mid.point, mapping=aes(x=x, y=y, label=name), color="black", size=3.5, fontface=3) 
   return(plot.genes)
@@ -153,13 +153,13 @@ plot_gene_ten <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
   genes.start.stop <- as.matrix(gene.region[, c("start", "end")])
   genes.df.pos <- data.frame(name=paste0("gene",rep(1:nrow(genes.start.stop), each=2)), pos=as.vector(t(genes.start.stop)), y=(80 - 8*rep(rep(1:10, each=2), ceiling(nrow(genes.start.stop)/10))[1:(2*nrow(genes.start.stop))]), stringsAsFactors=F)
   # plot.pos <- ggplot(data=genes.df.pos, aes(x=pos, y=y)) + geom_point(data=genes.df.pos, mapping=aes(x=pos, y=y, group=name), color="blue4", size=0.5, shape=15) + theme_bw() + xlab(paste0("Position on chromosome ", chr)) + ylab(" ") +  scale_y_continuous(limits=c(-1,81), breaks=c(10,20), labels=c("      ", "      ")) + theme(axis.title.y=element_text(vjust=2), axis.title.x=element_text(vjust=-0.5), axis.ticks.y = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + scale_x_continuous(limits=c(x.min, x.max))
-  plot.pos <- ggplot(data=genes.df.pos, aes(x=pos, y=y)) + theme_bw() + xlab(paste0("Position on chromosome ", chr)) + ylab(" ") +  scale_y_continuous(limits=c(-1,81), breaks=c(10,20), labels=c("      ", "      ")) + theme(axis.title.y=element_text(vjust=2), axis.title.x=element_text(vjust=-0.5), axis.ticks.y = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + scale_x_continuous(limits=c(x.min, x.max))
+  plot.pos <- ggplot(data=genes.df.pos, mapping=aes(x=pos, y=y)) + theme_bw() + xlab(paste0("Position on chromosome ", chr)) + ylab(" ") +  scale_y_continuous(limits=c(-1,81), breaks=c(10,20), labels=c("      ", "      ")) + theme(axis.title.y=element_text(vjust=2), axis.title.x=element_text(vjust=-0.5), axis.ticks.y = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + scale_x_continuous(limits=c(x.min, x.max))
   if(stack==TRUE){
     plot.pos <- plot.pos + theme(axis.title=element_text(size=14), axis.text=element_text(size=12))
   }else{
     plot.pos <- plot.pos + theme(axis.title=element_text(size=16), axis.text=element_text(size=14))
   }
-  plot.genes <- plot.pos + geom_line(data=genes.df.pos, aes(x=pos, y=y, group=name), colour="blue4", size=0.8) 
+  plot.genes <- plot.pos + geom_line(data=genes.df.pos, mapping=aes(x=pos, y=y, group=name), colour="blue4", size=0.8) 
   genes.df.mid.point <- data.frame(name=gene.region$gene, x=as.numeric(gene.region$mid.point), y=(80 - 8*rep(rep(1:10, each=1), ceiling(nrow(gene.region)/10))[1:nrow(gene.region)] + 3.5), stringsAsFactors=F)
   plot.genes <- plot.genes + geom_text(data=genes.df.mid.point, mapping=aes(x=x, y=y, label=name), color="black", size=3, fontface=3) 
   return(plot.genes)
@@ -183,13 +183,13 @@ plot_gene_fifteen <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
   genes.start.stop <- as.matrix(gene.region[, c("start", "end")])
   genes.df.pos <- data.frame(name=paste0("gene",rep(1:nrow(genes.start.stop), each=2)), pos=as.vector(t(genes.start.stop)), y=(120 - 8*rep(rep(1:15, each=2), ceiling(nrow(genes.start.stop)/15))[1:(2*nrow(genes.start.stop))]), stringsAsFactors=F)
   # plot.pos <- ggplot(data=genes.df.pos, aes(x=pos, y=y)) + geom_point(data=genes.df.pos, mapping=aes(x=pos, y=y, group=name), color="blue4", size=0.3, shape=15) + theme_bw() + xlab(paste0("Position on chromosome ", chr)) + ylab(" ") +  scale_y_continuous(limits=c(-1,121), breaks=c(10,20), labels=c("      ", "      ")) + theme(axis.title.y=element_text(vjust=2), axis.title.x=element_text(vjust=-0.5), axis.ticks.y = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + scale_x_continuous(limits=c(x.min, x.max))
-  plot.pos <- ggplot(data=genes.df.pos, aes(x=pos, y=y)) + theme_bw() + xlab(paste0("Position on chromosome ", chr)) + ylab(" ") +  scale_y_continuous(limits=c(-1,121), breaks=c(10,20), labels=c("      ", "      ")) + theme(axis.title.y=element_text(vjust=2), axis.title.x=element_text(vjust=-0.5), axis.ticks.y = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + scale_x_continuous(limits=c(x.min, x.max))
+  plot.pos <- ggplot(data=genes.df.pos, mapping=aes(x=pos, y=y)) + theme_bw() + xlab(paste0("Position on chromosome ", chr)) + ylab(" ") +  scale_y_continuous(limits=c(-1,121), breaks=c(10,20), labels=c("      ", "      ")) + theme(axis.title.y=element_text(vjust=2), axis.title.x=element_text(vjust=-0.5), axis.ticks.y = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + scale_x_continuous(limits=c(x.min, x.max))
   if(stack==TRUE){
     plot.pos <- plot.pos + theme(axis.title=element_text(size=14), axis.text=element_text(size=12))
   }else{
     plot.pos <- plot.pos + theme(axis.title=element_text(size=16), axis.text=element_text(size=14))
   }
-  plot.genes <- plot.pos + geom_line(data=genes.df.pos, aes(x=pos, y=y, group=name), colour="blue4", size=0.7) 
+  plot.genes <- plot.pos + geom_line(data=genes.df.pos, mapping=aes(x=pos, y=y, group=name), colour="blue4", size=0.7) 
   genes.df.mid.point <- data.frame(name=gene.region$gene, x=as.numeric(gene.region$mid.point), y=(120 - 8*rep(rep(1:15, each=1), ceiling(nrow(gene.region)/10))[1:nrow(gene.region)] + 3.5), stringsAsFactors=F)
   plot.genes <- plot.genes + geom_text(data=genes.df.mid.point, mapping=aes(x=x, y=y, label=name), color="black", size=2, fontface=3) 
   return(plot.genes)
@@ -278,36 +278,36 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
   if(!is.null(sig.thres)){ylim <- max(ylim, (-log10(sig.thres) + -log10(sig.thres)*0.1))}
   
   # Plot
-  marker.plot <- ggplot(aes(x=pos, y=stats), data=data)
+  marker.plot <- ggplot(data=data, mapping=aes(x=pos, y=stats))
   if(!is.null(sig.thres)){
     marker.plot <- marker.plot + geom_hline(yintercept=-log10(sig.thres), color="grey50", linetype="dashed")
   }
   marker.plot <- marker.plot + geom_point(aes(fill=r2), pch=21, size=3.5) + scale_fill_manual(values=c("#DCDCDC", "#66FFFF", "#66FF66", "#FFCC00", "#FF9933", "#CC3300"), drop=FALSE) 
-  marker.plot <- marker.plot + geom_point(data=lead_marker, aes(pos,stats), pch=23, colour="black", fill="purple", size=4)  
+  marker.plot <- marker.plot + geom_point(data=lead_marker, mapping=aes(pos,stats), pch=23, colour="black", fill="purple", size=4)  
   marker.plot <- marker.plot + theme_bw() + ylab(ylab) + xlab(NULL) + scale_x_continuous(limits=c(x.min,x.max), breaks=NULL) + scale_y_continuous(limits=c(0,ylim))
   marker.plot <- marker.plot + theme(axis.title.y=element_text(vjust=2.25, size=16), axis.text=element_text(size=14)) + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) 
   marker.plot <- marker.plot + theme(legend.text=element_text(size=11), legend.title=element_text(size=12), legend.background = element_rect(colour = "black")) + theme(panel.background=element_rect(fill=NA)) + theme(legend.position="bottom") + guides(fill = guide_legend(nrow = 1))
   if(geomtext){
-    marker.plot <- marker.plot + geom_text(data=lead_marker, aes(x=label_pos,y=stats,label=marker), vjust=-1, hjust=0.5, size=4.5)
+    marker.plot <- marker.plot + geom_text(data=lead_marker, mapping=aes(x=label_pos,y=stats,label=marker), vjust=-1, hjust=0.5, size=4.5)
     if(!is.null(labels)){
       if(labeltext){
-        marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
-        marker.plot <- marker.plot + geom_label_repel(data=label_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
+        marker.plot <- marker.plot + geom_point(data=label_points, mapping=aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
+        marker.plot <- marker.plot + geom_label_repel(data=label_points, mapping=aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
       }
     }
   }else{
    if(!is.null(labels)){
       if(labeltext){
-        marker.plot <- marker.plot + geom_point(data=label_points[-1,], aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
-        marker.plot <- marker.plot + geom_label_repel(data=label_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
+        marker.plot <- marker.plot + geom_point(data=label_points[-1,], mapping=aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
+        marker.plot <- marker.plot + geom_label_repel(data=label_points, mapping=aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
       }else{
-        marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
+        marker.plot <- marker.plot + geom_label_repel(data=lead_marker, mapping=aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
       }
     }else{
-      marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)   
+      marker.plot <- marker.plot + geom_label_repel(data=lead_marker, mapping=aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)   
     }
   }
-  # if(!is.null(labels)){if(labeltext){if(all(label_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.05*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}}
+  # if(!is.null(labels)){if(labeltext){if(all(label_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=label_points, mapping=aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.05*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}}
   if(type=="prob"){suppressMessages(marker.plot <- marker.plot + scale_y_continuous(limits=c(0,ylim), breaks=c(0, 0.25, 0.5, 0.75, 1)))}
   
   return(marker.plot)
@@ -607,36 +607,36 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
   if(!is.null(sig.thres)){ylim <- max(ylim, (-log10(sig.thres) + -log10(sig.thres)*0.1))}
   
   # Plot
-  marker.plot <- ggplot(aes(x=pos,y=stats), data=data) 
+  marker.plot <- ggplot(data=data, mapping=aes(x=pos,y=stats)) 
   if(!is.null(sig.thres)){
     marker.plot <- marker.plot + geom_hline(yintercept=-log10(sig.thres), color="grey50", linetype="dashed")
   }
   marker.plot <- marker.plot + geom_point(aes(fill=r2), pch=21, size=3) + scale_fill_manual(values=c("#DCDCDC", "#66FFFF", "#66FF66", "#FFCC00", "#FF9933", "#CC3300"), drop=FALSE) 
-  marker.plot <- marker.plot + geom_point(data=lead_marker, aes(x=pos,y=stats), pch=23, colour="black", fill="purple", size=4) 
+  marker.plot <- marker.plot + geom_point(data=lead_marker, mapping=aes(x=pos,y=stats), pch=23, colour="black", fill="purple", size=4) 
   marker.plot <- marker.plot + theme_bw() +  ylab(ylab) + xlab(NULL) + scale_x_continuous(limits=c(x.min, x.max), breaks=NULL) + scale_y_continuous(limits=c(0,ylim)) 
   marker.plot <- marker.plot + theme(axis.title.y=element_text(vjust=2.25, size=14), axis.text=element_text(size=12)) + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) 
   marker.plot <- marker.plot + theme(legend.text=element_text(size=10), legend.title=element_text(size=12), legend.background = element_rect(colour = "black")) + theme(panel.background=element_rect(fill=NA)) + theme(legend.position="bottom") + guides(fill = guide_legend(nrow = 1))
   if(geomtext){
-    marker.plot <- marker.plot + geom_text(data=lead_marker, aes(x=label_pos,y=stats,label=marker), vjust=-1, hjust=0.5, size=4.5)
+    marker.plot <- marker.plot + geom_text(data=lead_marker, mapping=aes(x=label_pos,y=stats,label=marker), vjust=-1, hjust=0.5, size=4.5)
     if(!is.null(labels)){
       if(labeltext){
-        marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
-        marker.plot <- marker.plot + geom_label_repel(data=label_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
+        marker.plot <- marker.plot + geom_point(data=label_points, mapping=aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
+        marker.plot <- marker.plot + geom_label_repel(data=label_points, mapping=aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
       }
     }
   }else{
    if(!is.null(labels)){
       if(labeltext){
-        marker.plot <- marker.plot + geom_point(data=label_points[-1,], aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
-        marker.plot <- marker.plot + geom_label_repel(data=label_points, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
+        marker.plot <- marker.plot + geom_point(data=label_points[-1,], mapping=aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) 
+        marker.plot <- marker.plot + geom_label_repel(data=label_points, mapping=aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
       }else{
-        marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
+        marker.plot <- marker.plot + geom_label_repel(data=lead_marker, mapping=aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)
       }
     }else{
-      marker.plot <- marker.plot + geom_label_repel(data=lead_marker, aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)   
+      marker.plot <- marker.plot + geom_label_repel(data=lead_marker, mapping=aes(x=pos,y=stats,label=marker), segment.color="black", size=4.5, point.padding=point.padding, nudge_x=nudge_x, nudge_y=nudge_y)   
     }
   }
-  # if(!is.null(labels)){if(labeltext){if(all(label_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.1*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.1*ylim), size=4.5, alpha=1)}}}
+  # if(!is.null(labels)){if(labeltext){if(all(label_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=label_points, mapping=aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.1*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.1*ylim), size=4.5, alpha=1)}}}
   if(type=="prob"){suppressMessages(marker.plot <- marker.plot + scale_y_continuous(limits=c(0,ylim), breaks=c(0, 0.25, 0.5, 0.75, 1)))}
   
   return(marker.plot)
