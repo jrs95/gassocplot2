@@ -63,7 +63,7 @@ plot_recombination_rate_stack <- function(chr, x.min, x.max, build=37) {
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
 plot_gene_zero <- function(chr, x.min, x.max, stack=FALSE){
-  genes.df.pos <- data.frame(pos=c(x.min,x.max), y=c(10,5), stringsAsFactors=F, stack=FALSE) 
+  genes.df.pos <- data.frame(pos=c(x.min,x.max), y=c(10,5), stringsAsFactors=F) 
   plot.genes <- ggplot(data=genes.df.pos, aes(x=pos, y=y)) + theme_bw() + xlab(paste0("Position on chromosome ", chr)) + ylab(" ") +  scale_y_continuous(limits=c(-5,17), breaks=c(8,16), labels=c("      ", "      ")) + theme(axis.title.y=element_text(vjust=2), axis.title.x=element_text(vjust=-0.5), axis.ticks.y = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + scale_x_continuous(limits=c(x.min, x.max)) 
   if(stack==TRUE){
     plot.genes <- plot.genes + theme(axis.title=element_text(size=14), axis.text=element_text(size=12))
