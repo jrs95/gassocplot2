@@ -26,7 +26,7 @@ plot_recombination_rate <- function(chr, x.min, x.max, build=37) {
   if(build==38){recombination.data <- gassocplot2::genetic_map_b38[(gassocplot2::genetic_map_b38$chr==chr & gassocplot2::genetic_map_b38$pos>=x.min & gassocplot2::genetic_map_b38$pos<=x.max),]}
   recomb.df <- data.frame(coordinates=recombination.data$pos, y=recombination.data$combined_rate, panel="Recombination Rate", stringsAsFactors=F)
   # cols <- c("Recomb. rate"="black","Gene"="#FF3D14","Exon"="#66A300")
-  recomb.plot <- ggplot(data = recomb.df, aes(x=coordinates, y=y)) + 
+  recomb.plot <- ggplot(data=recomb.df, mapping=aes(x=coordinates, y=y)) + 
   geom_line(colour="steelblue1") + scale_y_continuous(breaks=c(0,25,50,75,100), limits=c(0,100)) + xlab(NULL) + scale_x_continuous(limits=c(x.min,x.max), breaks=NULL) + ylab("Recomb. Rate") + theme_bw() + theme(axis.title.y=element_text(vjust=1.5), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + theme(axis.title=element_text(size=16), axis.text=element_text(size=14)) + theme(panel.background = element_rect(fill = NA))
   return(recomb.plot)
 }
@@ -46,7 +46,7 @@ plot_recombination_rate_stack <- function(chr, x.min, x.max, build=37) {
   if(build==38){recombination.data <- gassocplot2::genetic_map_b38[(gassocplot2::genetic_map_b38$chr==chr & gassocplot2::genetic_map_b38$pos>=x.min & gassocplot2::genetic_map_b38$pos<=x.max),]}
   recomb.df <- data.frame(coordinates=recombination.data$pos, y=recombination.data$combined_rate, panel="Recombination Rate", stringsAsFactors=F)
   # cols <- c("Recomb. rate"="black","Gene"="#FF3D14","Exon"="#66A300")
-  recomb.plot <- ggplot(data = recomb.df, aes(x=coordinates, y=y)) + 
+  recomb.plot <- ggplot(data=recomb.df, mapping=aes(x=coordinates, y=y)) + 
   geom_line(colour="steelblue1") + scale_y_continuous(breaks=c(0,25,50,75,100), limits=c(0,100)) + xlab(NULL) + scale_x_continuous(limits=c(x.min,x.max), breaks=NULL) + ylab("Recomb. Rate") + theme_bw() + theme(axis.title.y=element_text(vjust=1.5), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + theme(axis.title=element_text(size=14), axis.text=element_text(size=12)) + theme(panel.background = element_rect(fill = NA))
   return(recomb.plot)
 }
