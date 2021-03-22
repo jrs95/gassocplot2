@@ -223,7 +223,7 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
   if(is.null(corr) & !is.null(corr.top) & is.null(top.marker)) stop("top.marker must be defined if corr.top is provided")
   
   # Missing data
-  miss <- is.na(data$stats)
+  miss <- !complete.data(data)
   if(!is.null(corr)){corr <- corr[!miss, !miss]}
   if(!is.null(corr.top)){corr.top <- corr.top[!miss]}  
   data <- data[!miss,]
@@ -454,14 +454,18 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   if(!(build %in% c(37, 38))) stop("genome build can only be 37 or 38")
   
   # Dataset
+  data$marker <- as.character(data$marker)
+  data$chr <- as.integer(data$chr)
+  data$pos <- as.integer(data$pos)
   if(type=="log10p"){
-    mlog10p <- -(log(2) + pnorm(-abs(data$z), log.p=T))/log(10)
+    mlog10p <- -(log(2) + pnorm(-abs(as.numeric(data$z)), log.p=T))/log(10)
     mlog10p[mlog10p>1000] <- 1000
     data$stats <- mlog10p
-  }else{data$stats <- data$prob}
+  }else{
+    data$stats <- as.numeric(data$prob)
+  }
   data <- data[,c("marker", "chr", "pos", "stats")]
-  data$marker <- as.character(data$marker)
-  chr <- as.character(data$chr[1])
+  chr <- as.character(data$chr)[1]
   if(is.null(x.min)){x.min <- min(as.integer(data$pos))}
   if(is.null(x.max)){x.max <- max(as.integer(data$pos))}
   if((x.max - x.min)>10000000) stop("the plotting tool can plot a maximum of 10MB")
@@ -493,8 +497,8 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   if(ngenes>25){gene.plot <- plot_gene_fifteen(gene.region, chr, x.min, x.max)}
   
   # Marker plot
-  data$chr <- as.integer(data$chr)
-  data$pos <- as.integer(data$pos)
+  # data$chr <- as.integer(data$chr)
+  # data$pos <- as.integer(data$pos)
   if(type=="log10p"){ylab <- expression("-log"["10"]*paste("(",italic("p"),")"))}else{if(is.null(ylab)){ylab <- "Probability"}}  
   marker.plot <- plot_assoc(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, labels, sig.thres, point.padding, nudge_x, nudge_y)
   
@@ -552,7 +556,7 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
   if(is.null(corr) & is.null(corr.top)) stop("no correlation statistics were input")
   
   # Missing data
-  miss <- is.na(data$stats)
+  miss <- !complete.data(data)
   if(!is.null(corr)){corr <- corr[!miss, !miss]}
   if(!is.null(corr.top)){corr.top <- corr.top[!miss]}  
   data <- data[!miss,]
@@ -803,7 +807,9 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   
   # Coerce data
   markers$marker <- as.character(markers$marker)
-  chr <- as.character(markers$chr[1])
+  markers$chr <- as.integer(markers$chr)
+  markers$pos <- as.integer(markers$pos)
+  chr <- as.character(markers$chr)[1]
   r2_legend <- legend
   if(is.null(x.min)){x.min <- min(as.integer(markers$pos))}
   if(is.null(x.max)){x.max <- max(as.integer(markers$pos))}
@@ -811,10 +817,10 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   if(!is.null(sig.thres) & type!="log10p"){sig.thes <- NULL}
   
   # mlog10p
-  if(type=="log10p"){
-    mlog10p <- suppressWarnings(apply(z, 2, function(x){-(log(2) + pnorm(-abs(x), log.p=T))/log(10)}))
-    mlog10p[mlog10p>1000 & !is.na(mlog10p)] <- 1000
-  }
+  # if(type=="log10p"){
+  #   mlog10p <- suppressWarnings(apply(z, 2, function(x){-(log(2) + pnorm(-abs(as.numeric(x)), log.p=T))/log(10)}))
+  #   mlog10p[mlog10p>1000 & !is.na(mlog10p)] <- 1000
+  # }
   if(type=="log10p"){ylab <- expression("-log"["10"]*paste("(",italic("p"),")"))}else{if(is.null(ylab)){ylab <- "Probability"}}
  
   # Genes
@@ -848,9 +854,11 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   # Association plot
   for(i in length(traits):1){
     if(type=="log10p"){
-      data <- data.frame(marker=markers$marker, chr=as.integer(markers$chr), pos=as.integer(markers$pos), stats=mlog10p[,i], stringsAsFactors=F)
+      data <- data.frame(marker=markers$marker, chr=as.integer(markers$chr), pos=as.integer(markers$pos), stats=as.numeric(z[,i]), stringsAsFactors=F)
+      data$stats <- -(log(2) + pnorm(-abs(data$stats), log.p=T))/log(10)
+      data$stats[data$stats>1000] <- 1000
     }else{
-      data <- data.frame(marker=markers$marker, chr=as.integer(markers$chr), pos=as.integer(markers$pos), stats=z[,i], stringsAsFactors=F)    
+      data <- data.frame(marker=markers$marker, chr=as.integer(markers$chr), pos=as.integer(markers$pos), stats=as.numeric(z[,i]), stringsAsFactors=F)    
     }
     marker.plot <- plot_assoc_stack(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, labels, sig.thres, point.padding, nudge_x, nudge_y)
     legend <- g_legend(marker.plot)
