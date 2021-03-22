@@ -852,11 +852,11 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   # Association plot
   for(i in length(traits):1){
     if(type=="log10p"){
-      data <- data.frame(marker=markers$marker, chr=as.integer(markers$chr), pos=as.integer(markers$pos), stats=as.numeric(z[,i]), stringsAsFactors=F)
+      data <- data.frame(marker=as.character(markers$marker), chr=as.integer(markers$chr), pos=as.integer(markers$pos), stats=as.numeric(z[,i]), stringsAsFactors=F)
       data$stats <- -(log(2) + pnorm(-abs(data$stats), log.p=T))/log(10)
       data$stats[data$stats>1000] <- 1000
     }else{
-      data <- data.frame(marker=markers$marker, chr=as.integer(markers$chr), pos=as.integer(markers$pos), stats=as.numeric(z[,i]), stringsAsFactors=F)    
+      data <- data.frame(marker=as.character(markers$marker), chr=as.integer(markers$chr), pos=as.integer(markers$pos), stats=as.numeric(z[,i]), stringsAsFactors=F)    
     }
     marker.plot <- plot_assoc_stack(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, labels, sig.thres, point.padding, nudge_x, nudge_y)
     legend <- g_legend(marker.plot)
