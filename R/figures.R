@@ -4,7 +4,7 @@
 ## James Staley                                                       ##
 ## Email: jrstaley95@gmail.com                                        ##
 ##                                                                    ##
-## 22/10/20                                                           ##
+## 22/03/21                                                           ##
 ########################################################################
 
 ##########################################################
@@ -497,8 +497,6 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   if(ngenes>25){gene.plot <- plot_gene_fifteen(gene.region, chr, x.min, x.max)}
   
   # Marker plot
-  # data$chr <- as.integer(data$chr)
-  # data$pos <- as.integer(data$pos)
   if(type=="log10p"){ylab <- expression("-log"["10"]*paste("(",italic("p"),")"))}else{if(is.null(ylab)){ylab <- "Probability"}}  
   marker.plot <- plot_assoc(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, labels, sig.thres, point.padding, nudge_x, nudge_y)
   
