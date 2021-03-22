@@ -819,8 +819,7 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   #   mlog10p <- suppressWarnings(apply(z, 2, function(x){-(log(2) + pnorm(-abs(as.numeric(x)), log.p=T))/log(10)}))
   #   mlog10p[mlog10p>1000 & !is.na(mlog10p)] <- 1000
   # }
-  if(type=="log10p"){ylab <- expression("-log"["10"]*paste("(",italic("p"),")"))}else{if(is.null(ylab)){ylab <- "Probability"}}
- 
+  
   # Genes
   if(build==37){gene.region <- gassocplot2::genes_b37[(gassocplot2::genes_b37$chr==chr & !(gassocplot2::genes_b37$end<x.min) & !(gassocplot2::genes_b37$start>x.max)),]}
   if(build==38){gene.region <- gassocplot2::genes_b38[(gassocplot2::genes_b38$chr==chr & !(gassocplot2::genes_b38$end<x.min) & !(gassocplot2::genes_b38$start>x.max)),]}
@@ -850,6 +849,7 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   if(length(top.marker)!=0){if(is.na(top.marker)){top.marker <- NULL}}
     
   # Association plot
+  if(type=="log10p"){ylab <- expression("-log"["10"]*paste("(",italic("p"),")"))}else{if(is.null(ylab)){ylab <- "Probability"}}
   for(i in length(traits):1){
     if(type=="log10p"){
       data <- data.frame(marker=as.character(markers$marker), chr=as.integer(markers$chr), pos=as.integer(markers$pos), stats=as.numeric(z[,i]), stringsAsFactors=F)
