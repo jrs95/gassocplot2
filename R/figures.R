@@ -437,8 +437,10 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   # Error messages
   if(!(type=="log10p" | type=="prob")) stop("the type of plot has to be either log10p or prob")
   if(type=="log10p"){
+    if(length(names(data))!=4) stop("dataset needs to include marker, chr, pos and z columns in that order")
     if(any(names(data)!=c("marker", "chr", "pos", "z"))) stop("dataset needs to include marker, chr, pos and z columns in that order")
   }else{
+    if(length(names(data))!=4) stop("dataset needs to include marker, chr, pos and prob columns in that order")
     if(any(names(data)!=c("marker", "chr", "pos", "prob"))) stop("dataset needs to include marker, chr, pos and prob columns in that order")
   }
   if(!is.null(corr)){if(ncol(corr)!=nrow(data) | nrow(corr)!=nrow(data)) stop("corr has to have the same dimensions as the number of rows in the markers dataset")}
@@ -790,6 +792,7 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   if(!is.null(corr)){if(ncol(corr)!=nrow(markers) | nrow(corr)!=nrow(markers)) stop("corr has to have the same dimensions as the number of rows in the markers dataset")}
   if(!is.null(corr.top)){if(length(corr.top)!=nrow(markers)) stop("corr.top has to have the same length as the number of rows in the markers dataset")}
   # if(any(rownames(corr)!=markers$marker)) stop("corr has to have the same markers in the same order as the markers dataset")
+  if(length(names(data))!=3) stop("dataset needs to include marker, chr and pos columns in that order")
   if(any(names(markers)!=c("marker", "chr", "pos"))) stop("dataset needs to include marker, chr and pos columns in that order")
   if(length(unique(markers$chr))>1) stop("there should only be markers from one chromosome in the markers dataset")   
   if(!(markers$chr[1] %in% 1:22)) stop("the plotting tool is only for autosomal chromosomes") 
