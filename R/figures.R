@@ -458,9 +458,8 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   data$chr <- as.integer(data$chr)
   data$pos <- as.integer(data$pos)
   if(type=="log10p"){
-    mlog10p <- -(log(2) + pnorm(-abs(as.numeric(data$z)), log.p=T))/log(10)
-    mlog10p[mlog10p>1000] <- 1000
-    data$stats <- mlog10p
+    data$stats <- -(log(2) + pnorm(-abs(as.numeric(data$z)), log.p=T))/log(10)
+    data$stats[data$stats>1000] <- 1000
   }else{
     data$stats <- as.numeric(data$prob)
   }
@@ -813,12 +812,6 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
   if(is.null(x.max)){x.max <- max(as.integer(markers$pos))}
   if((x.max - x.min)>10000000) stop("the plotting tool can plot a maximum of 10MB")
   if(!is.null(sig.thres) & type!="log10p"){sig.thes <- NULL}
-  
-  # mlog10p
-  # if(type=="log10p"){
-  #   mlog10p <- suppressWarnings(apply(z, 2, function(x){-(log(2) + pnorm(-abs(as.numeric(x)), log.p=T))/log(10)}))
-  #   mlog10p[mlog10p>1000 & !is.na(mlog10p)] <- 1000
-  # }
   
   # Genes
   if(build==37){gene.region <- gassocplot2::genes_b37[(gassocplot2::genes_b37$chr==chr & !(gassocplot2::genes_b37$end<x.min) & !(gassocplot2::genes_b37$start>x.max)),]}
