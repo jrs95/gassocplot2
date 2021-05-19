@@ -224,7 +224,7 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
   
   # Missing data
   miss <- !complete.cases(data)
-  if(!is.null(corr)){corr <- corr[!miss, !miss]}
+  if(!is.null(corr)){corr <- corr[!miss, !miss, drop=F]}
   if(!is.null(corr.top)){corr.top <- corr.top[!miss]}  
   data <- data[!miss,]
   
@@ -556,7 +556,7 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
   
   # Missing data
   miss <- !complete.cases(data)
-  if(!is.null(corr)){corr <- corr[!miss, !miss]}
+  if(!is.null(corr)){corr <- corr[!miss, !miss, drop=F]}
   if(!is.null(corr.top)){corr.top <- corr.top[!miss]}  
   data <- data[!miss,]
   
