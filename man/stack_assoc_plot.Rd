@@ -7,7 +7,7 @@
 stack_assoc_plot(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL,
   type="log10p", x.min = NULL, x.max = NULL, top.marker = NULL, legend=TRUE,
   build=37, labels=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0,
-  nudge_y=0)
+  nudge_y=0, ylim_prob1=TRUE)
 }
 \arguments{
 \item{markers}{data.frame of markers with markername (marker), chromosome (chr) and position (pos)}
@@ -43,6 +43,8 @@ stack_assoc_plot(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL,
 \item{nudge_x}{nudge x position on labels}
 
 \item{nudge_y}{nudge y position on labels}
+
+\item{ylim_prob1}{set upper y limit to 1 for probability plots}
 }
 \description{
 stack_assoc_plot plots stacked regional association plots
