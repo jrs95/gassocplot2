@@ -641,7 +641,7 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
     }
   }
   # if(!is.null(labels)){if(labeltext){if(all(label_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=label_points, mapping=aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.1*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.1*ylim), size=4.5, alpha=1)}}}
-  if(type=="prob"){suppressMessages(marker.plot <- marker.plot + scale_y_continuous(limits=c(0,ylim), breaks=c(0, 0.25, 0.5, 0.75, 1)))}
+  if(type=="prob" & ylim_prob1){suppressMessages(marker.plot <- marker.plot + scale_y_continuous(limits=c(0,ylim), breaks=c(0, 0.25, 0.5, 0.75, 1)))}
   
   return(marker.plot)
 }
