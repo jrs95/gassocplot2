@@ -273,8 +273,9 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
   data$r2 <- factor(data$r2, levels=c("miss", "0.0-0.2", "0.2-0.4", "0.4-0.6", "0.6-0.8", "0.8-1.0"))
   
   # Y-axis limit
-  ylim <- max((max(data$stats)+0.1*max(data$stats)),1)
+  ylim <- max(data$stats)+0.1*max(data$stats)
   if(!is.null(sig.thres) & type=="log10p"){ylim <- max(ylim, (-log10(sig.thres) + -log10(sig.thres)*0.1))}
+  if(type=="prob" & ylim_prob1){ylim <- 1}
   
   # Plot
   marker.plot <- ggplot(data=data, mapping=aes(x=pos, y=stats))
@@ -607,8 +608,9 @@ plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.m
   data$r2 <- factor(data$r2, levels=c("miss", "0.0-0.2", "0.2-0.4", "0.4-0.6", "0.6-0.8", "0.8-1.0"))
   
   # Y-axis limit
-  ylim <- max((max(data$stats)+0.2*max(data$stats)),1)
+  ylim <- max(data$stats)+0.2*max(data$stats)
   if(!is.null(sig.thres) & type=="log10p"){ylim <- max(ylim, (-log10(sig.thres) + -log10(sig.thres)*0.1))}
+  if(type=="prob" & ylim_prob1){ylim <- 1}
   
   # Plot
   marker.plot <- ggplot(data=data, mapping=aes(x=pos,y=stats)) 
