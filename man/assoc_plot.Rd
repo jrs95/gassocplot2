@@ -7,7 +7,8 @@
 assoc_plot(data, corr=NULL, corr.top=NULL, ylab = NULL, title = NULL,
   subtitle = NULL, type = "log10p", x.min = NULL, x.max = NULL,
   top.marker=NULL, legend=TRUE, build=37, labels=NULL,
-  sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0)
+  sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0,
+  ylim_prob1=TRUE)
 }
 \arguments{
 \item{data}{data.frame with markername (marker), chromosome (chr), build 37 position (pos) and either z-statistics (z) or probabilities (prob) columns}
@@ -43,6 +44,8 @@ assoc_plot(data, corr=NULL, corr.top=NULL, ylab = NULL, title = NULL,
 \item{nudge_x}{nudge x position on labels}
 
 \item{nudge_y}{nudge y position on labels}
+
+\item{ylim_prob1}{set upper y limit to 1 for probability plots}
 }
 \description{
 assoc_plot plots a scatter graph of associations (e.g. log10 p-values)
