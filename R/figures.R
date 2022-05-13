@@ -213,10 +213,11 @@ plot_gene_fifteen <- function(gene.region, chr, x.min, x.max, stack=FALSE) {
 #' @param point.padding point padding on labels
 #' @param nudge_x nudge x position on labels
 #' @param nudge_y nudge y position on labels
+#' @param ylim_prob1 set upper y limit to 1 for probability plots
 #' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p", labels=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0){
+plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p", labels=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0, ylim_prob1=TRUE){
   
   # Error messages
   if(is.null(corr) & is.null(corr.top)) stop("no correlation statistics were input")
@@ -306,7 +307,7 @@ plot_assoc <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=
     }
   }
   # if(!is.null(labels)){if(labeltext){if(all(label_points$stats/ylim>=0.3)){marker.plot <- marker.plot + geom_point(data=label_points, mapping=aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(-0.05*ylim), size=4.5, alpha=1)}else{marker.plot <- marker.plot + geom_point(data=label_points, aes(pos,stats), pch=22, colour="black", fill="blue3", size=4) + geom_label(data=label_points, aes(x=label_pos,y=stats,label=marker), label.r=unit(0, "lines"), nudge_y=(0.05*ylim), size=4.5, alpha=1)}}}
-  if(type=="prob"){suppressMessages(marker.plot <- marker.plot + scale_y_continuous(limits=c(0,ylim), breaks=c(0, 0.25, 0.5, 0.75, 1)))}
+  if(type=="prob" & ylim_prob1){suppressMessages(marker.plot <- marker.plot + scale_y_continuous(limits=c(0,ylim), breaks=c(0, 0.25, 0.5, 0.75, 1)))}
   
   return(marker.plot)
 }
@@ -429,10 +430,11 @@ plot_assoc_combined <- function(recombination.plot, gene.plot, marker.plot, titl
 #' @param point.padding point padding on labels
 #' @param nudge_x nudge x position on labels
 #' @param nudge_y nudge y position on labels
+#' @param ylim_prob1 set upper y limit to 1 for probability plots
 #' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, subtitle=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, labels=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0){
+assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, subtitle=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, labels=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0, ylim_prob1=TRUE){
   
   # Error messages
   if(!(type=="log10p" | type=="prob")) stop("the type of plot has to be either log10p or prob")
@@ -499,7 +501,7 @@ assoc_plot <- function(data, corr=NULL, corr.top=NULL, ylab=NULL, title=NULL, su
   
   # Marker plot
   if(type=="log10p"){ylab <- expression("-log"["10"]*paste("(",italic("p"),")"))}else{if(is.null(ylab)){ylab <- "Probability"}}  
-  marker.plot <- plot_assoc(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, labels, sig.thres, point.padding, nudge_x, nudge_y)
+  marker.plot <- plot_assoc(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, labels, sig.thres, point.padding, nudge_x, nudge_y, ylim_prob1)
   
   # Combined plot
   combined.plot <- plot_assoc_combined(recombination.plot, gene.plot, marker.plot, title, subtitle, ngenes, legend)
@@ -546,10 +548,11 @@ assoc_plot_save <- function(x, file, width=9, height=7, dpi=500){
 #' @param point.padding point padding on labels
 #' @param nudge_x nudge x position on labels
 #' @param nudge_y nudge y position on labels
+#' @param ylim_prob1 set upper y limit to 1 for probability plots
 #' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p", labels=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0){
+plot_assoc_stack <- function(data, corr=NULL, corr.top=NULL, x.min, x.max, top.marker=NULL, ylab, type="log10p", labels=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0, ylim_prob1=TRUE){
   
   # Error messages
   if(is.null(corr) & is.null(corr.top)) stop("no correlation statistics were input")
@@ -780,10 +783,11 @@ add_g_legend <- function(g, legend){
 #' @param point.padding point padding on labels
 #' @param nudge_x nudge x position on labels
 #' @param nudge_y nudge y position on labels
+#' @param ylim_prob1 set upper y limit to 1 for probability plots
 #' @import ggplot2 grid gridExtra gtable ggrepel
 #' @author James R Staley <jrstaley95@gmail.com>
 #' @export
-stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, labels=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0){
+stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=NULL, type="log10p", x.min=NULL, x.max=NULL, top.marker=NULL, legend=TRUE, build=37, labels=NULL, sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0, ylim_prob1=TRUE){
   
   # Error messages
   if(!(type=="log10p" | type=="prob")) stop("the type of plot has to be either log10p or prob")
@@ -854,7 +858,7 @@ stack_assoc_plot <- function(markers, z, corr=NULL, corr.top=NULL, traits, ylab=
     }else{
       data <- data.frame(marker=as.character(markers$marker), chr=as.integer(markers$chr), pos=as.integer(markers$pos), stats=as.numeric(z[,i]), stringsAsFactors=F)    
     }
-    marker.plot <- plot_assoc_stack(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, labels, sig.thres, point.padding, nudge_x, nudge_y)
+    marker.plot <- plot_assoc_stack(data, corr, corr.top, x.min, x.max, top.marker, ylab, type, labels, sig.thres, point.padding, nudge_x, nudge_y, ylim_prob1)
     legend <- g_legend(marker.plot)
     if(i==length(traits)){g <- plot_regional_gene_assoc(recombination.plot, marker.plot, gene.plot, traits[i], ngenes)}
     if(i<length(traits)){
