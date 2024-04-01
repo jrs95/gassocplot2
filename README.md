@@ -1,3 +1,7 @@
+# GENI plots <img src='man/figures/logo.png' align="right" height="139"/>
+`gassocplot2` is no longer maintained, please use `fig_region` and `fig_region_stack` in `geni.plots` instead. `geni.plots` is available [here](https://github.com/jrs95/geni.plots/).  
+
+<!--
 # gassocplot2 <img src='man/figures/logo.png' align="right" height="139"/>
 Regional association plots for genetic and epigenetic data.
 
@@ -53,3 +57,4 @@ Please cite this R package using the link: https://github.com/jrs95/gassocplot2
 
 ### Stacked regional association plot
 ![](./man/figures/stack_assoc_plot_test.png)
+-->
