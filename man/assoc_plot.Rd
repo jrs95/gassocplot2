@@ -4,19 +4,34 @@
 \alias{assoc_plot}
 \title{assoc_plot}
 \usage{
-assoc_plot(data, corr=NULL, corr.top=NULL, ylab = NULL, title = NULL,
-  subtitle = NULL, type = "log10p", x.min = NULL, x.max = NULL,
-  top.marker=NULL, legend=TRUE, build=37, labels=NULL,
-  sig.thres=NULL, point.padding=0.15, nudge_x=0, nudge_y=0,
-  ylim_prob1=TRUE)
+assoc_plot(
+  data,
+  corr = NULL,
+  corr.top = NULL,
+  ylab = NULL,
+  title = NULL,
+  subtitle = NULL,
+  type = "log10p",
+  x.min = NULL,
+  x.max = NULL,
+  top.marker = NULL,
+  legend = TRUE,
+  build = 37,
+  labels = NULL,
+  sig.thres = NULL,
+  point.padding = 0.15,
+  nudge_x = 0,
+  nudge_y = 0,
+  ylim_prob1 = TRUE
+)
 }
 \arguments{
 \item{data}{data.frame with markername (marker), chromosome (chr), position (pos) and either z-statistics (z) or probabilities (prob) columns}
 
-\item{corr}{(Pearson) correlation matrix between markers (i.e. r not r2) with the markers ordered in the same way as in data}
+\item{corr}{correlation matrix between markers}
 
-\item{corr.top}{(Pearson) correlation statistics between the top marker and the rest of the markers (i.e. r not r2) with the markers ordered in the same way as in data}
-  
+\item{corr.top}{correlation statistics between the top marker and the rest of the markers}
+
 \item{ylab}{the y-axis label}
 
 \item{title}{title of the plot}
@@ -30,7 +45,7 @@ assoc_plot(data, corr=NULL, corr.top=NULL, ylab = NULL, title = NULL,
 \item{x.max}{end of region}
 
 \item{top.marker}{the top associated marker, i.e. the marker with the largest -log10p or probability}
-  
+
 \item{legend}{add r2 legend}
 
 \item{build}{genome build}

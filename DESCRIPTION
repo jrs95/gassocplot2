@@ -1,14 +1,28 @@
 Package: gassocplot2
 Title: Regional association plots
-Version: 1.0
-Date: 05-07-2020
-Author: James R Staley
-Maintainer: James Staley <jrstaley95@gmail.com>
-Description: This package is used to plot regional association figures. 
-Depends: R (>= 3.5.0), methods
-License: GPL (>= 2)
+Version: 0.0.2
+Date: 01-04-2024
+Authors@R: c(
+    person(
+        given = "James",
+        family = "Staley",
+        email = "jrstaley95@gmail.com",
+        role = c("aut", "cre"),
+        comment = c(ORCID = "0009-0001-9520-5011")
+    )
+  )
+Description: This package is used plot regional association plots. 
+Depends:
+    R (>= 3.6.0)
+Imports:
+    ggplot2,
+    grid,
+    gridExtra,
+    gtable
+Suggests:
+    knitr
+License: GPL-3
 ByteCompile: TRUE
 LazyData: TRUE
 Encoding: UTF-8
-Imports: ggplot2, ggrepel, grid, gridExtra, gtable, R.devices
-RoxygenNote: 6.0.1
+RoxygenNote: 7.3.1
